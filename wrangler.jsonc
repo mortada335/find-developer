@@ -1,5 +1,5 @@
   {
-    "name": "worker-name",
+    "name": "find-developer",
     "compatibility_date": "2026-02-13",
     "assets": {
       "directory": "./dist"
