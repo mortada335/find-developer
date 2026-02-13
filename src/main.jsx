@@ -8,9 +8,9 @@ import { ThemeProvider } from './context/theme'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-            <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-     <App />
-              </ThemeProvider>
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <App />
+      </ThemeProvider>
 
 
     </BrowserRouter>

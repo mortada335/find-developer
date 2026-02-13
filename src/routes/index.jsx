@@ -1,8 +1,29 @@
 import { lazy } from "react";
 
-const Home = lazy(()=> import("@/pages/home"))
-
+const Home = lazy(() => import("@/pages/home"))
+const Services = lazy(() => import("@/pages/services"))
+const Plans = lazy(() => import("@/pages/plans"))
+const Recommended = lazy(() => import("@/pages/recommended"))
+const SpecialNeeds = lazy(() => import("@/pages/special-needs"))
+const Register = lazy(() => import("@/pages/register"))
+const Login = lazy(() => import("@/pages/login"))
+const DeveloperProfile = lazy(() => import("@/pages/developer-profile"))
+const About = lazy(() => import("@/pages/about"))
+const Badges = lazy(() => import("@/pages/badges"))
+const Charts = lazy(() => import("@/pages/charts"))
+const NotFound = lazy(() => import("@/pages/not-found"))
 
 export const publicRoutes = [
-{ path: "/", element: <Home /> }
+        { path: "/", element: <Home />, index: true },
+        { path: "/services", element: <Services /> },
+        { path: "/plans", element: <Plans /> },
+        { path: "/recommended", element: <Recommended /> },
+        { path: "/special-needs-developers", element: <SpecialNeeds /> },
+        { path: "/register", element: <Register /> },
+        { path: "/login", element: <Login /> },
+        { path: "/developers/:slug", element: <DeveloperProfile /> },
+        { path: "/about", element: <About /> },
+        { path: "/badges", element: <Badges /> },
+        { path: "/charts", element: <Charts /> },
+        { path: "*", element: <NotFound /> },
 ]
