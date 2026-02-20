@@ -12,15 +12,14 @@ import {
 import { ModeToggle } from "./ModeToggle";
 
 const navLinks = [
-  { to: "/plans", label: "Plans" },
-  { to: "/services", label: "Services" },
+  { to: "/blogs", label: "Blogs" },
   { to: "/recommended", label: "Recommended" },
   { to: "/special-needs-developers", label: "Special Needs" },
 ];
 
 const authLinks = [
   { to: "/register", label: "Register" },
-  { to: "/login", label: "Login" },
+  { to: "/admin/login", label: "Login" },
 ];
 
 const NavLink = ({ to, label, active, onClick }) => (
@@ -45,15 +44,16 @@ const Navbar = () => {
         {/* Left: Brand + GitHub */}
         <div className="flex items-center gap-3">
           <Link to="/" className="text-lg font-bold tracking-tight">
-            find<span className="text-primary">Developer</span>
+            Find<span className="text-primary">Developer</span>
           </Link>
-          <Link
+          <a
             target="_blank"
-            to="https://github.com"
+            rel="noopener noreferrer"
+            href="https://github.com/ht3aa/find-developer"
             className="text-muted-foreground hover:text-foreground transition-colors"
           >
             <Github className="h-4 w-4" />
-          </Link>
+          </a>
         </div>
 
         {/* Center: Desktop nav links */}
@@ -92,7 +92,7 @@ const Navbar = () => {
             <SheetContent side="right" className="w-72">
               <SheetHeader>
                 <SheetTitle className="text-left">
-                  fin<span className="text-primary">Developer</span>
+                  Find<span className="text-primary">Developer</span>
                 </SheetTitle>
               </SheetHeader>
 
