@@ -14,6 +14,7 @@ import { ModeToggle } from "./ModeToggle";
 const navLinks = [
   { to: "/blogs", label: "Blogs" },
   { to: "/recommended", label: "Recommended" },
+  { to: "/services", label: "Services"},
   { to: "/special-needs-developers", label: "Special Needs" },
 ];
 
