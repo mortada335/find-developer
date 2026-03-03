@@ -8,6 +8,7 @@ const SpecialNeeds = lazy(() => import("@/pages/special-needs"));
 const Register = lazy(() => import("@/pages/register"));
 const Login = lazy(() => import("@/pages/login"));
 const DeveloperProfile = lazy(() => import("@/pages/developer-profile"));
+const Profile = lazy(() => import("@/pages/profile"));
 const About = lazy(() => import("@/pages/about"));
 const Badges = lazy(() => import("@/pages/badges"));
 const Charts = lazy(() => import("@/pages/charts"));
@@ -24,9 +25,11 @@ export const publicRoutes = [
   { path: "/login", element: <Login /> },
   { path: "/admin/login", element: <Login /> },
   { path: "/developers/:slug", element: <DeveloperProfile /> },
+  { path: "/profile", element: <Profile /> },
   { path: "/about", element: <About /> },
   { path: "/badges", element: <Badges /> },
   { path: "/charts", element: <Charts /> },
   { path: "/blogs", element: <Blogs /> },
   { path: "*", element: <NotFound /> },
 ];
+

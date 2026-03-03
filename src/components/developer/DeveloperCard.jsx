@@ -34,7 +34,7 @@ const DeveloperCard = ({ developer }) => {
   } = developer;
 
   return (
-    <Card className="group flex flex-col h-full overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-purple-500/30 dark:hover:border-purple-400/30">
+    <Card className="group flex flex-col h-full overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-purple-500/30 dark:hover:border-purple-400/30 card-animated">
       {/* ── Header: Avatar + Name (fixed height) ── */}
       <CardHeader className="pb-0 shrink-0">
         <div className="flex items-start gap-4">
@@ -153,7 +153,7 @@ const DeveloperCard = ({ developer }) => {
         <Button
           asChild
           variant="outline"
-          className="w-full dark:border-purple-500/30 dark:hover:bg-purple-500/10 dark:hover:text-purple-400 transition-all"
+          className="w-full btn-animated dark:border-purple-500/30 dark:hover:bg-purple-500/10 dark:hover:text-purple-400 transition-all"
         >
           <Link to={`/developers/${slug}`}>View Full Profile</Link>
         </Button>

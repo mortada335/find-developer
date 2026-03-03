@@ -22,7 +22,7 @@ const ITEMS_PER_PAGE = 6;
 
 const BlogCard = ({ blog }) => {
   return (
-    <Card className="group flex flex-col h-full overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-purple-500/30 dark:hover:border-purple-400/30">
+    <Card className="group flex flex-col h-full overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-purple-500/30 dark:hover:border-purple-400/30 card-animated">
       {/* Featured Image Placeholder */}
       <div className="w-full h-48 bg-muted flex items-center justify-center overflow-hidden">
         {blog.featuredImage ? (

@@ -183,7 +183,11 @@ const developers = {
   async getAll(filters = {}) {
     await delay();
     const registeredUsers = (storage.get(STORAGE_KEYS.USERS) || []).map(
-      ({ password: _, ...u }) => u
+      (u) => {
+        const safeUser = { ...u };
+        delete safeUser.password;
+        return safeUser;
+      }
     );
     const allDevs = [...mockDevelopers, ...registeredUsers];
 
@@ -217,7 +221,11 @@ const developers = {
   async getBySlug(slug) {
     await delay();
     const registeredUsers = (storage.get(STORAGE_KEYS.USERS) || []).map(
-      ({ password: _, ...u }) => u
+      (u) => {
+        const safeUser = { ...u };
+        delete safeUser.password;
+        return safeUser;
+      }
     );
     const allDevs = [...mockDevelopers, ...registeredUsers];
     return allDevs.find((dev) => dev.slug === slug) || null;

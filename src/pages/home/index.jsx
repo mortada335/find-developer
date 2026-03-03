@@ -69,16 +69,16 @@ const Home = () => {
       {/* Hero Section */}
       <div
         id="hero"
-        className="w-full flex flex-col gap-4 items-center justify-center py-16 md:py-24"
+        className="w-full flex flex-col gap-4 items-center justify-center py-16 md:py-24 page-enter"
       >
-        <h1 className="text-3xl md:text-5xl font-bold text-center bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-3xl md:text-5xl font-bold text-center bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-600 bg-clip-text text-transparent gradient-text-animated animate-fade-in">
           Find Your Perfect Developer
         </h1>
-        <p className="text-muted-foreground text-lg md:text-xl text-center max-w-2xl">
+        <p className="text-muted-foreground text-lg md:text-xl text-center max-w-2xl animate-slide-up">
           Discover talented developers ready to bring your projects to life
         </p>
         <Link to="/register">
-          <Button className="mt-2 bg-purple-600 hover:bg-purple-700 text-white dark:bg-purple-600 dark:hover:bg-purple-700 dark:text-white transition duration-200">
+          <Button className="mt-2 btn-glow animate-pulse-glow bg-purple-600 hover:bg-purple-700 text-white dark:bg-purple-600 dark:hover:bg-purple-700 dark:text-white transition duration-200">
             Register as Developer
           </Button>
         </Link>

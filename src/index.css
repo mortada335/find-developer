@@ -117,10 +117,255 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
-    @apply bg-background text-foreground;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   ANIMATIONS
+   ───────────────────────────────────────────── */
+
+/* Keyframes */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(147, 51, 234, 0.4); }
+  50%      { box-shadow: 0 0 20px 4px rgba(147, 51, 234, 0.15); }
+}
+
+@keyframes ripple {
+  0%   { transform: scale(0); opacity: 0.6; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+@keyframes cardEnter {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Utility classes */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out both;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s ease-out both;
+}
+
+.animate-slide-down {
+  animation: slideDown 0.5s ease-out both;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s ease-out both;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(147, 51, 234, 0.08) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* Staggered card animations */
+.card-animated {
+  animation: cardEnter 0.5s ease-out both;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card-animated:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 8px 10px -6px rgba(0, 0, 0, 0.08);
+}
+
+.dark .card-animated:hover {
+  box-shadow:
+    0 10px 25px -5px rgba(0, 0, 0, 0.3),
+    0 0 15px rgba(147, 51, 234, 0.08);
+}
+
+/* Stagger delays for grid items */
+.card-animated:nth-child(1)  { animation-delay: 0s; }
+.card-animated:nth-child(2)  { animation-delay: 0.08s; }
+.card-animated:nth-child(3)  { animation-delay: 0.16s; }
+.card-animated:nth-child(4)  { animation-delay: 0.24s; }
+.card-animated:nth-child(5)  { animation-delay: 0.32s; }
+.card-animated:nth-child(6)  { animation-delay: 0.40s; }
+.card-animated:nth-child(7)  { animation-delay: 0.48s; }
+.card-animated:nth-child(8)  { animation-delay: 0.56s; }
+.card-animated:nth-child(9)  { animation-delay: 0.64s; }
+
+/* Button animations */
+.btn-animated {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-animated:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 4px 12px rgba(147, 51, 234, 0.2);
+}
+
+.btn-animated:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Purple CTA button glow */
+.btn-glow {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.btn-glow:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 4px 15px rgba(147, 51, 234, 0.35),
+    0 0 30px rgba(147, 51, 234, 0.15);
+}
+
+.btn-glow:active {
+  transform: translateY(0);
+}
+
+/* Ripple on click */
+.btn-animated::after,
+.btn-glow::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.btn-animated:active::after,
+.btn-glow:active::after {
+  animation: ripple 0.5s ease-out;
+}
+
+/* Hero gradient text animation */
+.gradient-text-animated {
+  background-size: 200% auto;
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+/* Section fade-in on scroll (initial state) */
+.section-animate {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.section-animate.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Smooth page transition wrapper */
+.page-enter {
+  animation: fadeIn 0.3s ease-out, slideUp 0.4s ease-out;
+}
+
+/* Pulse glow for CTAs */
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* Badge hover */
+.badge-animated {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.badge-animated:hover {
+  transform: scale(1.05);
+}
+
+/* Nav link underline animation */
+.nav-link-animated {
+  position: relative;
+}
+
+.nav-link-animated::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #9333ea, #7c3aed);
+  border-radius: 1px;
+  transition: width 0.3s ease;
+}
+
+.nav-link-animated:hover::after {
+  width: 100%;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-slide-up,
+  .animate-slide-down,
+  .animate-scale-in,
+  .animate-float,
+  .animate-shimmer,
+  .card-animated,
+  .page-enter,
+  .animate-pulse-glow,
+  .gradient-text-animated {
+    animation: none !important;
+  }
+  .card-animated:hover,
+  .btn-animated:hover,
+  .btn-glow:hover,
+  .badge-animated:hover {
+    transform: none !important;
   }
 }

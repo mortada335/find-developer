@@ -32,10 +32,10 @@ const Badges = () => {
     <Section className="h-auto min-h-0">
       {/* Header */}
       <div className="w-full py-12 md:py-16 text-center">
-        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-600 bg-clip-text text-transparent animate-fade-in">
           Developer Badges
         </h1>
-        <p className="text-muted-foreground text-lg mt-3 max-w-2xl mx-auto">
+        <p className="text-muted-foreground text-lg mt-3 max-w-2xl mx-auto animate-slide-up">
           Earn badges to showcase your achievements and stand out on the
           platform
         </p>
@@ -48,7 +48,7 @@ const Badges = () => {
           return (
             <Card
               key={badge.id}
-              className="group overflow-hidden transition-all duration-300 hover:shadow-lg"
+              className="group overflow-hidden transition-all duration-300 hover:shadow-lg card-animated"
               style={{
                 borderColor: `${badge.color}30`,
               }}

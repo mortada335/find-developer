@@ -80,10 +80,10 @@ const Plans = () => {
     <Section className="h-auto min-h-0">
       {/* Header */}
       <div className="w-full py-12 md:py-16 text-center">
-        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-600 bg-clip-text text-transparent animate-fade-in">
           Plans & Pricing
         </h1>
-        <p className="text-muted-foreground text-lg mt-3 max-w-2xl mx-auto">
+        <p className="text-muted-foreground text-lg mt-3 max-w-2xl mx-auto animate-slide-up">
           Choose the plan that fits your needs and start getting discovered
         </p>
       </div>
@@ -93,7 +93,7 @@ const Plans = () => {
         {plans.map((plan) => (
           <Card
             key={plan.name}
-            className={`relative flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg ${
+            className={`relative flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg card-animated ${
               plan.popular
                 ? "border-purple-500 dark:border-purple-400 shadow-md"
                 : "hover:border-purple-500/30 dark:hover:border-purple-400/30"
@@ -149,8 +149,8 @@ const Plans = () => {
                 variant={plan.variant}
                 className={`w-full ${
                   plan.popular
-                    ? "bg-purple-600 hover:bg-purple-700 text-white dark:bg-purple-600 dark:hover:bg-purple-700 dark:text-white"
-                    : ""
+                    ? "btn-glow bg-purple-600 hover:bg-purple-700 text-white dark:bg-purple-600 dark:hover:bg-purple-700 dark:text-white"
+                    : "btn-animated"
                 }`}
               >
                 <Link to="/register">{plan.cta}</Link>

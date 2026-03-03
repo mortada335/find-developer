@@ -23,7 +23,7 @@ const NavLink = ({ to, label, active, onClick }) => (
   <Link
     to={to}
     onClick={onClick}
-    className={`text-sm font-medium transition-colors hover:text-primary ${
+    className={`text-sm font-medium transition-colors hover:text-primary nav-link-animated ${
       active ? "text-primary" : "text-muted-foreground"
     }`}
   >
@@ -72,19 +72,22 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-2">
             {isAuthenticated ? (
               <>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Link
+                  to="/profile"
+                  className="flex items-center gap-2 text-sm hover:opacity-80 transition-opacity"
+                >
                   <div className="h-7 w-7 rounded-full bg-purple-500/10 flex items-center justify-center">
                     <User className="h-4 w-4 text-purple-600 dark:text-purple-400" />
                   </div>
                   <span className="max-w-[120px] truncate font-medium text-foreground">
                     {user?.name}
                   </span>
-                </div>
+                </Link>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={handleLogout}
-                  className="text-muted-foreground hover:text-foreground"
+                  className="btn-animated text-muted-foreground hover:text-foreground"
                 >
                   <LogOut className="h-4 w-4 mr-1" />
                   Logout
@@ -92,10 +95,10 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Button asChild variant="outline" size="sm">
+                <Button asChild variant="outline" size="sm" className="btn-animated">
                   <Link to="/register">Register</Link>
                 </Button>
-                <Button asChild size="sm">
+                <Button asChild size="sm" className="btn-glow">
                   <Link to="/admin/login">Login</Link>
                 </Button>
               </>
@@ -134,17 +137,21 @@ const Navbar = () => {
 
                 {isAuthenticated ? (
                   <>
-                    <div className="flex items-center gap-2 text-sm">
+                    <Link
+                      to="/profile"
+                      onClick={() => setOpen(false)}
+                      className="flex items-center gap-2 text-sm"
+                    >
                       <div className="h-7 w-7 rounded-full bg-purple-500/10 flex items-center justify-center">
                         <User className="h-4 w-4 text-purple-600 dark:text-purple-400" />
                       </div>
                       <span className="font-medium truncate">
                         {user?.name}
                       </span>
-                    </div>
+                    </Link>
                     <Button
                       variant="outline"
-                      className="w-full"
+                      className="w-full btn-animated"
                       onClick={() => {
                         handleLogout();
                         setOpen(false);
@@ -156,12 +163,12 @@ const Navbar = () => {
                   </>
                 ) : (
                   <>
-                    <Button asChild variant="outline" className="w-full">
+                    <Button asChild variant="outline" className="w-full btn-animated">
                       <Link to="/register" onClick={() => setOpen(false)}>
                         Register
                       </Link>
                     </Button>
-                    <Button asChild className="w-full">
+                    <Button asChild className="w-full btn-glow">
                       <Link to="/admin/login" onClick={() => setOpen(false)}>
                         Login
                       </Link>
