@@ -494,3 +494,154 @@ export const filterOptions = {
   locations: ["Baghdad", "Basra", "Erbil", "Mosul", "Najaf", "Karbala"],
   availabilityTypes: ["full-time", "part-time", "freelance", "contract"],
 };
+
+// Mock blog data
+export const mockBlogs = [
+  {
+    id: 1,
+    title: "Find Developer Goal",
+    slug: "find-developer-goal",
+    excerpt:
+      "This blog explains the goal of this platform and how it connects talented developers with opportunities.",
+    publishedAt: "2026-02-17",
+    featuredImage: null,
+    author: { name: "Hasan Tahseen", slug: "hasan-tahseen" },
+  },
+  {
+    id: 2,
+    title: "🚀 Laravel MCP API Docs",
+    slug: "laravel-mcp-api-docs",
+    excerpt:
+      "Laravel MCP API Docs, a package that exposes your OpenAPI specification directly to AI tools via Laravel MCP. Instead of letting AI guess endpoints and payloads, it allows structured querying of your real API contract.",
+    publishedAt: "2026-02-17",
+    featuredImage: null,
+    author: { name: "Dhurgham Oday", slug: "dhurgham-oday" },
+  },
+  {
+    id: 3,
+    title: "How to Be the First Card on the Platform",
+    slug: "how-to-be-the-first-card-on-the-platform",
+    excerpt:
+      "Here we explain how developer cards are ordered on the platform and what you can do to improve your visibility.",
+    publishedAt: "2026-02-17",
+    featuredImage: null,
+    author: { name: "Hasan Tahseen", slug: "hasan-tahseen" },
+  },
+  {
+    id: 4,
+    title: "Free CV Generator",
+    slug: "free-cv-generator",
+    excerpt:
+      "Free CV generated from the data you entered in the system. A quick and easy way to build your professional resume.",
+    publishedAt: "2026-02-21",
+    featuredImage: null,
+    author: { name: "Hasan Tahseen", slug: "hasan-tahseen" },
+  },
+];
+
+// Detailed badge info for the badges page
+export const mockBadgeDetails = [
+  {
+    id: 1,
+    name: "Soft Skills",
+    slug: "soft-skills",
+    description:
+      "The developer that has this badge means he/she has great soft skills at work.",
+    color: "#0047AB",
+    developersCount: 36,
+  },
+  {
+    id: 2,
+    name: "Experience Validated",
+    slug: "experience-validated",
+    description:
+      "A developer with this badge has passed an experience verification assessment. The assessment is conducted through an individual interview, where the developer is asked about the information provided on their profile in order to verify its accuracy and consistency.",
+    color: "#00ad2b",
+    developersCount: 53,
+  },
+  {
+    id: 3,
+    name: "Passion Developer",
+    slug: "passion-developer",
+    description:
+      "This badge indicates that the developer brings positive energy, shows strong readiness to take on tasks, adapts well to company environments, and reliably handles work requests. The assessment is conducted through an individual interview.",
+    color: "#e0a200",
+    developersCount: 2,
+  },
+  {
+    id: 4,
+    name: "Platform Contributor",
+    slug: "platform-contributor",
+    description:
+      "This badge states that the developer has 1 or more contributions on the Find Developer platform.",
+    color: "#ffb000",
+    developersCount: 7,
+  },
+  {
+    id: 5,
+    name: "Platform Marketer",
+    slug: "platform-marketer",
+    description:
+      "This badge is awarded to developers who bring at least 10 new developers to the platform.",
+    color: "#a7c200",
+    developersCount: 2,
+  },
+  {
+    id: 6,
+    name: "The Founder",
+    slug: "the-founder",
+    description:
+      "This badge is dedicated to the founder of the Find Developer platform.",
+    color: "#de0000",
+    developersCount: 1,
+  },
+];
+
+// Chart data for analytics page
+export const mockChartData = {
+  developersByLocation: [
+    { label: "Baghdad", count: 131 },
+    { label: "Basra", count: 12 },
+    { label: "Najaf", count: 6 },
+    { label: "Karbala", count: 6 },
+    { label: "Unknown", count: 6 },
+    { label: "Erbil", count: 5 },
+    { label: "Sana'a", count: 5 },
+    { label: "Babylon", count: 5 },
+    { label: "Nineveh", count: 3 },
+    { label: "Duhok", count: 2 },
+  ],
+  developersByAvailabilityType: [
+    { label: "Freelance", count: 108 },
+    { label: "Part-time", count: 98 },
+    { label: "Full-time", count: 73 },
+    { label: "Remote", count: 70 },
+    { label: "Hybrid", count: 30 },
+    { label: "Remote Full-time", count: 17 },
+    { label: "Hybrid Full-time", count: 17 },
+  ],
+  averageSalaryByExperience: [
+    { years: 0, salary: 1414044 },
+    { years: 1, salary: 1071335 },
+    { years: 2, salary: 1597867 },
+    { years: 3, salary: 1629013 },
+    { years: 4, salary: 2089286 },
+    { years: 5, salary: 2278111 },
+    { years: 6, salary: 3000000 },
+    { years: 7, salary: 3125000 },
+    { years: 8, salary: 1687500 },
+    { years: 13, salary: 3750000 },
+  ],
+  developersByJobTitle: [
+    { label: "Full Stack Developer", count: 70 },
+    { label: "Mobile Developer", count: 38 },
+    { label: "Frontend Developer", count: 37 },
+    { label: "Backend Developer", count: 31 },
+    { label: "DevOps Engineer", count: 5 },
+    { label: "IT Support", count: 2 },
+    { label: "Documentation Manager", count: 2 },
+    { label: "UI/UX Designer", count: 1 },
+    { label: "Software Project Manager", count: 1 },
+    { label: "Head of Software Development", count: 1 },
+  ],
+};
