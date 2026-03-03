@@ -499,8 +499,8 @@ export const filterOptions = {
 export const mockBlogs = [
   {
     id: 1,
-    title: "Find Developer Goal",
-    slug: "find-developer-goal",
+    title: "DevConnect Goal",
+    slug: "devconnect-goal",
     excerpt:
       "This blog explains the goal of this platform and how it connects talented developers with opportunities.",
     publishedAt: "2026-02-17",
@@ -573,7 +573,7 @@ export const mockBadgeDetails = [
     name: "Platform Contributor",
     slug: "platform-contributor",
     description:
-      "This badge states that the developer has 1 or more contributions on the Find Developer platform.",
+      "This badge states that the developer has 1 or more contributions on the DevConnect platform.",
     color: "#ffb000",
     developersCount: 7,
   },
@@ -591,7 +591,7 @@ export const mockBadgeDetails = [
     name: "The Founder",
     slug: "the-founder",
     description:
-      "This badge is dedicated to the founder of the Find Developer platform.",
+      "This badge is dedicated to the founder of the DevConnect platform.",
     color: "#de0000",
     developersCount: 1,
   },

@@ -76,7 +76,7 @@ const FilterPanel = ({ filters, onFilterChange }) => {
       expected_salary_to: "0",
     });
 
-    return `Search for developers on https://find-developer.com according to the following company requirements: ${filterDesc} Use this URL: https://www.find-developer.com/?${params.toString()}`;
+    return `Search for developers on https://devconnect.com according to the following company requirements: ${filterDesc} Use this URL: https://www.devconnect.com/?${params.toString()}`;
   }, [filters]);
 
   const handleCopyPrompt = async () => {
@@ -225,7 +225,7 @@ const FilterPanel = ({ filters, onFilterChange }) => {
             </div>
             <p className="text-xs text-muted-foreground">
               Copy this prompt to ask an AI assistant to search for developers on
-              find-developer.com. Add filters above, then copy the prompt below.
+              devconnect.com. Add filters above, then copy the prompt below.
             </p>
             <pre className="text-xs bg-muted p-3 rounded-md overflow-x-auto whitespace-pre-wrap break-words">
               {aiPrompt}

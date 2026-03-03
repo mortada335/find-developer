@@ -21,12 +21,12 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Link to="/" className="text-lg font-bold tracking-tight">
-              Find<span className="text-primary">Developer</span>
+              Dev<span className="text-primary">Connect</span>
             </Link>
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href="https://github.com/ht3aa/find-developer"
+              href="https://github.com"
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
               <Github className="h-4 w-4" />
@@ -67,7 +67,7 @@ const Footer = () => {
           </div>
 
           <p className="text-sm text-muted-foreground">
-            © 2026 FindDeveloper. All rights reserved.
+            © 2026 DevConnect. All rights reserved.
           </p>
         </div>
       </div>

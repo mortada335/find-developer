@@ -53,11 +53,11 @@ const AnnouncementBanners = () => {
   return (
     <div className="mt-14">
       <AnnouncementBanner type="info" storageKey="open-source">
-        <span className="font-medium">Open Source!</span> FindDeveloper is open
+        <span className="font-medium">Open Source!</span> DevConnect is open
         source. If you find it useful, give us a star on GitHub — it helps us
         grow and improve!{" "}
         <a
-          href="https://github.com/ht3aa/find-developer"
+          href="https://github.com"
           target="_blank"
           rel="noopener noreferrer"
           className="font-semibold underline underline-offset-2 hover:opacity-80"

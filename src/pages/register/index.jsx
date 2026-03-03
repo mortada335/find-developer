@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, Navigate } from "react-router-dom";
 import Section from "@/components/layout/Section";
 import {
   Card,
@@ -11,10 +11,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { CheckCircle, UserPlus } from "lucide-react";
+import { UserPlus, Loader2 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 const Register = () => {
-  const [submitted, setSubmitted] = useState(false);
+  const navigate = useNavigate();
+  const { register, isAuthenticated } = useAuth();
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -45,37 +49,50 @@ const Register = () => {
     "Technical Lead",
   ];
 
+  // Redirect if already logged in
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
+
   const updateField = (key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }));
+    if (error) setError("");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-  };
+    setError("");
 
-  if (submitted) {
-    return (
-      <Section className="h-auto min-h-0">
-        <div className="w-full max-w-lg mx-auto py-24 text-center space-y-4">
-          <div className="mx-auto h-16 w-16 rounded-full bg-green-500/10 flex items-center justify-center">
-            <CheckCircle className="h-8 w-8 text-green-500" />
-          </div>
-          <h1 className="text-2xl font-bold">Registration Successful!</h1>
-          <p className="text-muted-foreground">
-            Your profile has been submitted for review. You&apos;ll be notified
-            once it&apos;s approved.
-          </p>
-          <Button
-            asChild
-            className="mt-4 bg-purple-600 hover:bg-purple-700 text-white dark:bg-purple-600 dark:hover:bg-purple-700 dark:text-white"
-          >
-            <Link to="/">Back to Home</Link>
-          </Button>
-        </div>
-      </Section>
-    );
-  }
+    // Validation
+    if (form.password !== form.passwordConfirm) {
+      setError("Passwords do not match.");
+      return;
+    }
+    if (form.password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      await register({
+        name: form.name,
+        email: form.email,
+        password: form.password,
+        jobTitle: form.jobTitle,
+        phone: form.phone,
+        bio: form.bio,
+        linkedinUrl: form.linkedinUrl,
+        githubUrl: form.githubUrl,
+        portfolioUrl: form.portfolioUrl,
+      });
+      navigate("/");
+    } catch (err) {
+      setError(err.message || "Registration failed. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <Section className="h-auto min-h-0">
@@ -103,6 +120,13 @@ const Register = () => {
 
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Error */}
+              {error && (
+                <div className="rounded-md bg-red-500/10 border border-red-500/20 px-4 py-3 text-sm text-red-600 dark:text-red-400">
+                  {error}
+                </div>
+              )}
+
               {/* Account Information */}
               <div className="space-y-4">
                 <h3 className="text-sm font-medium text-muted-foreground">
@@ -242,9 +266,17 @@ const Register = () => {
 
               <Button
                 type="submit"
+                disabled={submitting}
                 className="w-full bg-purple-600 hover:bg-purple-700 text-white dark:bg-purple-600 dark:hover:bg-purple-700 dark:text-white"
               >
-                Create Account
+                {submitting ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Creating Account...
+                  </>
+                ) : (
+                  "Create Account"
+                )}
               </Button>
 
               <p className="text-center text-sm text-muted-foreground">

@@ -70,7 +70,7 @@ const About = () => {
               <h2 className="text-xl font-bold">Our Mission</h2>
             </div>
             <p className="text-muted-foreground leading-relaxed">
-              Find Developer is a community-driven platform built to help
+              DevConnect is a community-driven platform built to help
               developers in Iraq and the Middle East showcase their skills and
               connect with employers. We believe every talented developer
               deserves to be found, regardless of their background or
@@ -178,7 +178,7 @@ const About = () => {
             </Button>
             <Button asChild variant="outline">
               <a
-                href="https://github.com/ht3aa/find-developer"
+                href="https://github.com"
                 target="_blank"
                 rel="noopener noreferrer"
               >

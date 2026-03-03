@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, Navigate, useLocation } from "react-router-dom";
 import Section from "@/components/layout/Section";
 import {
   Card,
@@ -10,23 +10,46 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { LogIn } from "lucide-react";
+import { LogIn, Loader2 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { login, isAuthenticated } = useAuth();
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     email: "",
     password: "",
     remember: false,
   });
 
+  // Redirect if already logged in
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
+
   const updateField = (key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }));
+    if (error) setError("");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Client-side only — no backend
-    alert("Login functionality requires a backend. This is a demo.");
+    setError("");
+    setSubmitting(true);
+
+    try {
+      await login(form.email, form.password);
+      // Redirect to intended page or home
+      const from = location.state?.from?.pathname || "/";
+      navigate(from, { replace: true });
+    } catch (err) {
+      setError(err.message || "Login failed. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -55,6 +78,13 @@ const Login = () => {
 
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Error */}
+              {error && (
+                <div className="rounded-md bg-red-500/10 border border-red-500/20 px-4 py-3 text-sm text-red-600 dark:text-red-400">
+                  {error}
+                </div>
+              )}
+
               <div className="space-y-2">
                 <label className="text-sm font-medium">Email</label>
                 <Input
@@ -97,9 +127,17 @@ const Login = () => {
 
               <Button
                 type="submit"
+                disabled={submitting}
                 className="w-full bg-purple-600 hover:bg-purple-700 text-white dark:bg-purple-600 dark:hover:bg-purple-700 dark:text-white"
               >
-                Login
+                {submitting ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Logging in...
+                  </>
+                ) : (
+                  "Login"
+                )}
               </Button>
 
               <p className="text-center text-sm text-muted-foreground">

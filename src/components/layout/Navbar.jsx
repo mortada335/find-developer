@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Github, Menu } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Github, Menu, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -10,17 +10,13 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ModeToggle } from "./ModeToggle";
+import { useAuth } from "@/context/AuthContext";
 
 const navLinks = [
   { to: "/blogs", label: "Blogs" },
   { to: "/recommended", label: "Recommended" },
-  { to: "/services", label: "Services"},
+  { to: "/services", label: "Services" },
   { to: "/special-needs-developers", label: "Special Needs" },
-];
-
-const authLinks = [
-  { to: "/register", label: "Register" },
-  { to: "/admin/login", label: "Login" },
 ];
 
 const NavLink = ({ to, label, active, onClick }) => (
@@ -37,7 +33,14 @@ const NavLink = ({ to, label, active, onClick }) => (
 
 const Navbar = () => {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
@@ -45,12 +48,12 @@ const Navbar = () => {
         {/* Left: Brand + GitHub */}
         <div className="flex items-center gap-3">
           <Link to="/" className="text-lg font-bold tracking-tight">
-            Find<span className="text-primary">Developer</span>
+            Dev<span className="text-primary">Connect</span>
           </Link>
           <a
             target="_blank"
             rel="noopener noreferrer"
-            href="https://github.com/ht3aa/find-developer"
+            href="https://github.com"
             className="text-muted-foreground hover:text-foreground transition-colors"
           >
             <Github className="h-4 w-4" />
@@ -64,19 +67,38 @@ const Navbar = () => {
           ))}
         </div>
 
-        {/* Right: Auth links + ModeToggle (desktop) + Hamburger (mobile) */}
+        {/* Right: Auth + ModeToggle (desktop) + Hamburger (mobile) */}
         <div className="flex items-center gap-2">
           <div className="hidden md:flex items-center gap-2">
-            {authLinks.map(({ to, label }) =>
-              label === "Register" ? (
-                <Button key={to} asChild variant="outline" size="sm">
-                  <Link to={to}>{label}</Link>
+            {isAuthenticated ? (
+              <>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <div className="h-7 w-7 rounded-full bg-purple-500/10 flex items-center justify-center">
+                    <User className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                  </div>
+                  <span className="max-w-[120px] truncate font-medium text-foreground">
+                    {user?.name}
+                  </span>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleLogout}
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  <LogOut className="h-4 w-4 mr-1" />
+                  Logout
                 </Button>
-              ) : (
-                <Button key={to} asChild size="sm">
-                  <Link to={to}>{label}</Link>
+              </>
+            ) : (
+              <>
+                <Button asChild variant="outline" size="sm">
+                  <Link to="/register">Register</Link>
                 </Button>
-              ),
+                <Button asChild size="sm">
+                  <Link to="/admin/login">Login</Link>
+                </Button>
+              </>
             )}
           </div>
 
@@ -93,7 +115,7 @@ const Navbar = () => {
             <SheetContent side="right" className="w-72">
               <SheetHeader>
                 <SheetTitle className="text-left">
-                  Find<span className="text-primary">Developer</span>
+                  Dev<span className="text-primary">Connect</span>
                 </SheetTitle>
               </SheetHeader>
 
@@ -110,25 +132,41 @@ const Navbar = () => {
 
                 <div className="my-2 h-px bg-border" />
 
-                {authLinks.map(({ to, label }) =>
-                  label === "Register" ? (
+                {isAuthenticated ? (
+                  <>
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="h-7 w-7 rounded-full bg-purple-500/10 flex items-center justify-center">
+                        <User className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                      </div>
+                      <span className="font-medium truncate">
+                        {user?.name}
+                      </span>
+                    </div>
                     <Button
-                      key={to}
-                      asChild
                       variant="outline"
                       className="w-full"
+                      onClick={() => {
+                        handleLogout();
+                        setOpen(false);
+                      }}
                     >
-                      <Link to={to} onClick={() => setOpen(false)}>
-                        {label}
+                      <LogOut className="h-4 w-4 mr-1" />
+                      Logout
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button asChild variant="outline" className="w-full">
+                      <Link to="/register" onClick={() => setOpen(false)}>
+                        Register
                       </Link>
                     </Button>
-                  ) : (
-                    <Button key={to} asChild className="w-full">
-                      <Link to={to} onClick={() => setOpen(false)}>
-                        {label}
+                    <Button asChild className="w-full">
+                      <Link to="/admin/login" onClick={() => setOpen(false)}>
+                        Login
                       </Link>
                     </Button>
-                  ),
+                  </>
                 )}
               </div>
             </SheetContent>
