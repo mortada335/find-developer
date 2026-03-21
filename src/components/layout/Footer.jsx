@@ -76,7 +76,7 @@ const Footer = () => {
             sponsorship or donation makes a real difference — thank you for believing in our mission.
           </p>
           <div className="shrink-0 px-4 py-2 border border-border rounded font-mono text-sm">
-            Qi card: <span className="font-bold">5862997060</span>
+            Qi card: <span className="font-bold">6896338032</span>
           </div>
         </div>
 
