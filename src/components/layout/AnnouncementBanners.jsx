@@ -57,7 +57,7 @@ const AnnouncementBanners = () => {
         source. If you find it useful, give us a star on GitHub — it helps us
         grow and improve!{" "}
         <a
-          href="https://github.com"
+          href="https://github.com/mortada335/find-developer"
           target="_blank"
           rel="noopener noreferrer"
           className="font-semibold underline underline-offset-2 hover:opacity-80"

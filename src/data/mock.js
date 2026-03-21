@@ -380,7 +380,7 @@ export const mockServices = [
           "Providing a clear profile and recommendations for suitable job roles or career paths.",
         ],
         ctaEmail:
-          "mailto:ht3aa2001@gmail.com?subject=Service+Inquiry%3A+Professional+Assessment+Interview&body=Hello%2C+I+would+like+to+inquire+about+Professional+Assessment+Interview+service.+For+user%3A+Zainab+Nemah",
+          "mailto:mortadaahmad56@gmail.com?subject=Service+Inquiry%3A+Professional+Assessment+Interview&body=Hello%2C+I+would+like+to+inquire+about+Professional+Assessment+Interview+service.+For+user%3A+Zainab+Nemah",
       },
       {
         id: 2,
@@ -395,7 +395,7 @@ export const mockServices = [
           "Awareness sessions on employee rights and obligations under the Iraqi Labor Law, including contracts, working hours, leave, termination, and workplace protections.",
         ],
         ctaEmail:
-          "mailto:ht3aa2001@gmail.com?subject=Service+Inquiry%3A+Job+Application+%26+Interview+Consultation&body=Hello%2C+I+would+like+to+inquire+about+Job+Application+%26+Interview+Consultation+service.+For+user%3A+Zainab+Nemah",
+          "mailto:mortadaahmad56@gmail.com?subject=Service+Inquiry%3A+Job+Application+%26+Interview+Consultation&body=Hello%2C+I+would+like+to+inquire+about+Job+Application+%26+Interview+Consultation+service.+For+user%3A+Zainab+Nemah",
       },
     ],
   },

@@ -178,7 +178,7 @@ const About = () => {
             </Button>
             <Button asChild variant="outline">
               <a
-                href="https://github.com"
+                href="https://github.com/mortada335/find-developer"
                 target="_blank"
                 rel="noopener noreferrer"
               >

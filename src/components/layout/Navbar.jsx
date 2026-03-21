@@ -55,7 +55,7 @@ const Navbar = () => {
           <a
             target="_blank"
             rel="noopener noreferrer"
-            href="https://github.com"
+            href="https://github.com/mortada335/find-developer"
             className="text-muted-foreground hover:text-foreground transition-colors"
           >
             <Github className="h-4 w-4" />
@@ -186,7 +186,7 @@ const Navbar = () => {
       <Bug className="inline h-3.5 w-3.5 mr-1.5 -mt-0.5" />
       If you find any bug or error, please{" "}
       <a
-        href="https://github.com"
+        href="https://github.com/mortada335/find-developer"
         target="_blank"
         rel="noopener noreferrer"
         className="underline font-medium text-foreground hover:text-amber-500 transition-colors"

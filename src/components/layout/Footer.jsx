@@ -45,7 +45,7 @@ const Footer = () => {
               Hackathons
             </Link>
             <a
-              href="mailto:ht3aa2001@gmail.com?subject=Support"
+              href="mailto:mortadaahmad56@gmail.com?subject=Support"
               className="hover:text-foreground transition-colors"
             >
               Support
@@ -84,15 +84,15 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-4 border-t border-border/50">
           <p className="text-sm text-muted-foreground">
             © 2026 DevConnect. All rights reserved. Support:{" "}
-            <a href="mailto:ht3aa2001@gmail.com" className="hover:text-foreground transition-colors font-medium">
-              ht3aa2001@gmail.com
+            <a href="mailto:mortadaahmad56@gmail.com" className="hover:text-foreground transition-colors font-medium">
+              mortadaahmad56@gmail.com
             </a>
           </p>
 
           {/* Social Icons */}
           <div className="flex items-center gap-4">
             <a
-              href="https://github.com"
+              href="https://github.com/mortada335/find-developer"
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-foreground transition-colors"

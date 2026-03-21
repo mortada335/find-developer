@@ -125,9 +125,9 @@ const Home = () => {
               asChild
               className="bg-amber-500 hover:bg-amber-600 text-black font-medium"
             >
-              <a href="mailto:ht3aa2001@gmail.com?subject=Get+Access">
+              <a href="mailto:mortadaahmad56@gmail.com?subject=Get+Access">
                 <Mail className="h-4 w-4 mr-2" />
-                Get access — contact ht3aa2001@gmail.com
+                Get access — contact mortadaahmad56@gmail.com
               </a>
             </Button>
           </CardContent>
