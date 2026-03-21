@@ -1,29 +1,37 @@
 import { useParams, Link } from "react-router-dom";
 import { useMemo } from "react";
 import Section from "@/components/layout/Section";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import BadgeChip from "@/components/developer/BadgeChip";
 import { mockDevelopers } from "@/data/mock";
 import {
   ArrowLeft,
   User,
   Mail,
-  Phone,
-  Globe,
   Github,
   Linkedin,
   MapPin,
   Briefcase,
-  Clock,
-  FileText,
-  ExternalLink,
-  Quote,
-  Tag,
-  Box,
+  MessageCircle,
+  ThumbsUp,
+  Mic,
+  Rocket,
+  BatteryFull,
+  UsersRound,
+  BarChart3,
+  Star,
 } from "lucide-react";
+
+// Badge icon config — matching find-developer.com colored icons row
+const badgeConfig = {
+  "soft-skills": { icon: Mic, color: "#3b82f6" },
+  "experience-validated": { icon: Rocket, color: "#22c55e" },
+  "passion-developer": { icon: BatteryFull, color: "#eab308" },
+  "platform-contributor": { icon: UsersRound, color: "#a855f7" },
+  "platform-marketer": { icon: BarChart3, color: "#ec4899" },
+  "the-founder": { icon: Star, color: "#f97316" },
+};
 
 const DeveloperProfile = () => {
   const { slug } = useParams();
@@ -42,7 +50,7 @@ const DeveloperProfile = () => {
           </p>
           <Button
             asChild
-            className="bg-purple-600 hover:bg-purple-700 text-white dark:bg-purple-600 dark:hover:bg-purple-700 dark:text-white"
+            className="bg-amber-500 hover:bg-amber-600 text-black"
           >
             <Link to="/">Browse Developers</Link>
           </Button>
@@ -58,179 +66,182 @@ const DeveloperProfile = () => {
     bio,
     skills = [],
     experienceYears,
+    experience,
+    availability,
     availabilityType,
     location,
-    phone,
     email,
-    portfolioUrl,
     githubUrl,
     linkedinUrl,
     badges = [],
-    projects = [],
     recommendations = [],
+    isRecommended,
   } = developer;
+
+  const expDisplay = experienceYears ?? experience ?? null;
+  const initials = name
+    ? name
+        .split(" ")
+        .map((w) => w[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase()
+    : "?";
+  const recCount = recommendations.length + (isRecommended ? 1 : 0);
 
   return (
     <Section className="h-auto min-h-0">
-      <div className="w-full max-w-4xl mx-auto py-8 space-y-6">
-        {/* Back Button */}
-        <Button
-          asChild
-          variant="ghost"
-          size="sm"
-          className="text-muted-foreground hover:text-purple-600 dark:hover:text-purple-400"
+      <div className="w-full max-w-5xl mx-auto py-8 space-y-6">
+        {/* Back to Search */}
+        <Link
+          to="/"
+          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-amber-500 transition-colors"
         >
-          <Link to="/">
-            <ArrowLeft className="h-4 w-4 mr-1" />
-            Back to developers
-          </Link>
-        </Button>
+          <ArrowLeft className="h-4 w-4" />
+          Back to Search
+        </Link>
 
-        {/* Main Profile Card */}
-        <Card className="overflow-hidden">
-          <CardHeader className="pb-4">
-            <div className="flex flex-col sm:flex-row items-start gap-6">
-              {/* Avatar */}
-              <div className="h-24 w-24 rounded-full bg-muted flex items-center justify-center overflow-hidden border-2 border-purple-500/30 shrink-0">
-                {avatar ? (
-                  <img
-                    src={avatar}
-                    alt={name}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <User className="h-12 w-12 text-muted-foreground" />
-                )}
+        {/* ── Profile Header ── */}
+        <div className="flex flex-col sm:flex-row items-start gap-6">
+          {/* Avatar with initials fallback */}
+          <div className="h-20 w-20 rounded-full bg-amber-500/20 flex items-center justify-center overflow-hidden shrink-0 text-2xl font-bold text-amber-500">
+            {avatar ? (
+              <img
+                src={avatar}
+                alt={name}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              initials
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <h1 className="text-2xl md:text-3xl font-bold">{name}</h1>
+            <p className="text-lg text-muted-foreground">{jobTitle}</p>
+
+            {/* Badge Icons */}
+            {badges.length > 0 && (
+              <div className="flex items-center gap-1.5 pt-1">
+                {badges.map((badgeSlug) => {
+                  const config = badgeConfig[badgeSlug];
+                  if (!config) return null;
+                  const IconComp = config.icon;
+                  return (
+                    <div
+                      key={badgeSlug}
+                      className="h-8 w-8 rounded-md flex items-center justify-center"
+                      style={{ backgroundColor: `${config.color}20` }}
+                      title={badgeSlug.replace(/-/g, " ")}
+                    >
+                      <IconComp
+                        className="h-4 w-4"
+                        style={{ color: config.color }}
+                      />
+                    </div>
+                  );
+                })}
               </div>
+            )}
+          </div>
+        </div>
 
-              {/* Info */}
-              <div className="flex-1 space-y-2">
-                <h1 className="text-2xl md:text-3xl font-bold">{name}</h1>
-                <p className="text-lg text-muted-foreground">{jobTitle}</p>
-
-                <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-                  {location && (
-                    <span className="inline-flex items-center gap-1">
-                      <MapPin className="h-3.5 w-3.5" />
-                      {location}
-                    </span>
-                  )}
-                  {experienceYears != null && (
-                    <span className="inline-flex items-center gap-1">
-                      <Clock className="h-3.5 w-3.5" />
-                      {experienceYears} years experience
-                    </span>
-                  )}
-                  {availabilityType && (
-                    <Badge variant="outline" className="text-xs capitalize">
-                      {availabilityType}
-                    </Badge>
-                  )}
-                </div>
-
-                {/* Badges */}
-                {badges.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {badges.map((badge) => (
-                      <BadgeChip key={badge} badgeSlug={badge} />
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          </CardHeader>
-
-          <Separator />
-
-          <CardContent className="pt-6 space-y-6">
-            {/* Contact Links */}
-            <div className="flex flex-wrap gap-3">
-              {email && (
-                <Button asChild variant="outline" size="sm">
-                  <a href={`mailto:${email}`}>
-                    <Mail className="h-4 w-4 mr-1.5" />
-                    Email
-                  </a>
-                </Button>
+        {/* ── Stats Bar ── */}
+        <Card className="border-border/50">
+          <CardContent className="py-4 px-6">
+            <div className="flex flex-wrap items-center gap-6 text-sm">
+              {expDisplay != null && (
+                <span className="inline-flex items-center gap-2">
+                  <Briefcase className="h-4 w-4 text-muted-foreground" />
+                  <span className="font-medium">{expDisplay} Years Experience</span>
+                </span>
               )}
-              {phone && (
-                <Button asChild variant="outline" size="sm">
-                  <a href={`tel:${phone}`}>
-                    <Phone className="h-4 w-4 mr-1.5" />
-                    {phone}
-                  </a>
-                </Button>
+              {location && (
+                <span className="inline-flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-muted-foreground" />
+                  <span>{location} Location</span>
+                </span>
               )}
-              {portfolioUrl && (
-                <Button asChild variant="outline" size="sm">
-                  <a
-                    href={portfolioUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Globe className="h-4 w-4 mr-1.5" />
-                    Portfolio
-                  </a>
-                </Button>
+              {availability && (
+                <span className="inline-flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-green-500" />
+                  <span className="text-green-500 font-medium">
+                    {availability} Status
+                  </span>
+                </span>
               )}
-              {githubUrl && (
-                <Button asChild variant="outline" size="sm">
-                  <a
-                    href={githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Github className="h-4 w-4 mr-1.5" />
-                    GitHub
-                  </a>
-                </Button>
-              )}
-              {linkedinUrl && (
-                <Button asChild variant="outline" size="sm">
-                  <a
-                    href={linkedinUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Linkedin className="h-4 w-4 mr-1.5" />
-                    LinkedIn
-                  </a>
-                </Button>
+              {recCount > 0 && (
+                <span className="inline-flex items-center gap-2">
+                  <ThumbsUp className="h-4 w-4 text-muted-foreground" />
+                  <span>
+                    {recCount} Recommendation{recCount !== 1 ? "s" : ""}
+                  </span>
+                </span>
               )}
             </div>
+          </CardContent>
+        </Card>
 
-            {/* Salary */}
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Briefcase className="h-4 w-4" />
-              <span>Expected Salary: Offer by HR only</span>
-            </div>
-
-            {/* Bio */}
+        {/* ── Two Column Layout ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Main Content (left, 2/3) */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* About */}
             {bio && (
-              <div className="space-y-2">
-                <h3 className="text-sm font-semibold flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                  About
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {bio}
-                </p>
+              <div className="space-y-3">
+                <h2 className="text-xl font-bold">About</h2>
+                <p className="text-muted-foreground leading-relaxed">{bio}</p>
               </div>
             )}
 
-            {/* Skills */}
+            {/* Get In Touch */}
+            <div className="space-y-3">
+              <h2 className="text-xl font-bold">Get In Touch</h2>
+              <div className="flex flex-wrap gap-3">
+                {email && (
+                  <Button asChild variant="outline" size="sm">
+                    <a href={`mailto:${email}`}>
+                      <Mail className="h-4 w-4 mr-1.5" />
+                      Send Email
+                    </a>
+                  </Button>
+                )}
+                {githubUrl && (
+                  <Button asChild variant="outline" size="sm">
+                    <a
+                      href={githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Github className="h-4 w-4 mr-1.5" />
+                      GitHub Profile
+                    </a>
+                  </Button>
+                )}
+                {linkedinUrl && (
+                  <Button asChild variant="outline" size="sm">
+                    <a
+                      href={linkedinUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Linkedin className="h-4 w-4 mr-1.5" />
+                      LinkedIn
+                    </a>
+                  </Button>
+                )}
+              </div>
+            </div>
+
+            {/* Skills & Technologies */}
             {skills.length > 0 && (
-              <div className="space-y-2">
-                <h3 className="text-sm font-semibold flex items-center gap-2">
-                  <Tag className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                  Skills
-                </h3>
+              <div className="space-y-3">
+                <h2 className="text-xl font-bold">Skills & Technologies</h2>
                 <div className="flex flex-wrap gap-2">
                   {skills.map((skill) => (
                     <Badge
                       key={skill}
-                      variant="outline"
-                      className="bg-purple-500/5 border-purple-500/20 text-purple-700 dark:text-purple-300"
+                      className="bg-amber-500 hover:bg-amber-600 text-black border-amber-500"
                     >
                       {skill}
                     </Badge>
@@ -238,102 +249,109 @@ const DeveloperProfile = () => {
                 </div>
               </div>
             )}
-          </CardContent>
-        </Card>
 
-        {/* Projects */}
-        {projects.length > 0 && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Box className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                Projects
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {projects.map((project, i) => (
-                <Card key={i} className="border-dashed">
-                  <CardContent className="pt-6 space-y-2">
-                    <div className="flex items-start justify-between gap-2">
-                      <h4 className="font-medium">{project.title}</h4>
-                      {project.url && (
-                        <a
-                          href={project.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-purple-600 dark:text-purple-400 hover:underline inline-flex items-center gap-1 text-sm shrink-0"
-                        >
-                          Visit
-                          <ExternalLink className="h-3 w-3" />
-                        </a>
-                      )}
-                    </div>
-                    {project.description && (
-                      <p className="text-sm text-muted-foreground">
-                        {project.description}
-                      </p>
-                    )}
-                  </CardContent>
-                </Card>
-              ))}
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Recommendations */}
-        {recommendations.length > 0 && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Quote className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                Recommendations
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {recommendations.map((rec, i) => (
-                <Card
-                  key={i}
-                  className="border-dashed bg-muted/30 dark:bg-muted/10"
+            {/* Recommendations */}
+            <div className="space-y-3">
+              <h2 className="text-xl font-bold">
+                Recommendations ({recCount})
+              </h2>
+              {recommendations.length > 0 ? (
+                <div className="space-y-3">
+                  {recommendations.map((rec, i) => (
+                    <Card
+                      key={i}
+                      className="border-dashed bg-muted/30 dark:bg-muted/10"
+                    >
+                      <CardContent className="pt-4 pb-4 space-y-2">
+                        <p className="text-sm italic text-muted-foreground">
+                          &ldquo;{rec.quote}&rdquo;
+                        </p>
+                        <div className="flex items-center gap-2">
+                          <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
+                            <User className="h-4 w-4 text-muted-foreground" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium">
+                              {rec.recommenderName}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {rec.recommenderTitle}
+                            </p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <Link
+                  to="#"
+                  className="text-amber-500 hover:underline text-sm"
                 >
-                  <CardContent className="pt-6 space-y-3">
-                    <p className="text-sm italic text-muted-foreground">
-                      &ldquo;{rec.quote}&rdquo;
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
-                        <User className="h-4 w-4 text-muted-foreground" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium">
-                          {rec.recommenderName}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {rec.recommenderTitle}
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Download CV (mock) */}
-        <Card>
-          <CardContent className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div>
-              <h3 className="font-medium">Download CV</h3>
-              <p className="text-sm text-muted-foreground">
-                Get the full resume for {name}
-              </p>
+                  Login to Recommend
+                </Link>
+              )}
             </div>
-            <Button className="bg-purple-600 hover:bg-purple-700 text-white dark:bg-purple-600 dark:hover:bg-purple-700 dark:text-white">
-              <FileText className="h-4 w-4 mr-2" />
-              Download CV
-            </Button>
-          </CardContent>
-        </Card>
+          </div>
+
+          {/* ── Quick Info Sidebar (right, 1/3) ── */}
+          <div className="space-y-4">
+            <Card className="border-border/50">
+              <CardContent className="pt-6 space-y-4">
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  Quick Info
+                </h3>
+
+                <div className="space-y-3 text-sm">
+                  <div>
+                    <p className="text-muted-foreground">Role</p>
+                    <p className="font-semibold">{jobTitle}</p>
+                  </div>
+                  {expDisplay != null && (
+                    <div>
+                      <p className="text-muted-foreground">Experience</p>
+                      <p className="font-semibold">{expDisplay} Years</p>
+                    </div>
+                  )}
+                  {location && (
+                    <div>
+                      <p className="text-muted-foreground">Location</p>
+                      <p className="font-semibold">{location}</p>
+                    </div>
+                  )}
+                  <div>
+                    <p className="text-muted-foreground">Availability</p>
+                    <p className="font-semibold text-green-500">
+                      {availability || availabilityType || "Unknown"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-2 pt-2">
+                  {email && (
+                    <Button
+                      asChild
+                      className="w-full bg-amber-500 hover:bg-amber-600 text-black"
+                    >
+                      <a href={`mailto:${email}`}>
+                        <Mail className="h-4 w-4 mr-2" />
+                        Contact Now
+                      </a>
+                    </Button>
+                  )}
+                  <Button variant="outline" className="w-full gap-2">
+                    <MessageCircle className="h-4 w-4" />
+                    Login to Chat
+                  </Button>
+                  <Button variant="outline" className="w-full gap-2">
+                    <ThumbsUp className="h-4 w-4" />
+                    Recommend
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     </Section>
   );

@@ -1,4 +1,5 @@
 import Section from "@/components/layout/Section";
+import HeroSection from "@/components/layout/HeroSection";
 import {
   Card,
   CardContent,
@@ -29,17 +30,13 @@ const badgeIcons = {
 
 const Badges = () => {
   return (
-    <Section className="h-auto min-h-0">
-      {/* Header */}
-      <div className="w-full py-12 md:py-16 text-center">
-        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-600 bg-clip-text text-transparent animate-fade-in">
-          Developer Badges
-        </h1>
-        <p className="text-muted-foreground text-lg mt-3 max-w-2xl mx-auto animate-slide-up">
-          Earn badges to showcase your achievements and stand out on the
-          platform
-        </p>
-      </div>
+    <>
+      <HeroSection
+        badge="Badge catalog"
+        title="Explore all badges"
+        subtitle="Badges represent skills, achievements, and certifications earned by our developers. Browse the full catalog below."
+      />
+      <Section className="h-auto min-h-0">
 
       {/* Badge Grid */}
       <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-12">
@@ -97,6 +94,7 @@ const Badges = () => {
         })}
       </div>
     </Section>
+    </>
   );
 };
 

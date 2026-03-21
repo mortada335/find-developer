@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import Section from "@/components/layout/Section";
+import HeroSection from "@/components/layout/HeroSection";
 import {
   Card,
   CardContent,
@@ -80,17 +81,13 @@ const Blogs = () => {
   }, [currentPage]);
 
   return (
-    <Section className="h-auto min-h-0">
-      {/* Header */}
-      <div className="w-full py-12 md:py-16 text-center">
-        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-600 bg-clip-text text-transparent">
-          Blog Posts
-        </h1>
-        <p className="text-muted-foreground text-lg mt-3 max-w-2xl mx-auto">
-          Latest articles, guides, and platform updates from our community
-        </p>
-      </div>
-
+    <>
+      <HeroSection
+        badge="Developer blog"
+        title="Blog"
+        subtitle="Articles and posts from our developers. Read about their experience, tips, and insights."
+      />
+      <Section className="h-auto min-h-0">
       {/* Blog Grid */}
       <div className="w-full space-y-6 pb-12">
         {paginatedBlogs.length > 0 ? (
@@ -151,6 +148,7 @@ const Blogs = () => {
         )}
       </div>
     </Section>
+    </>
   );
 };
 

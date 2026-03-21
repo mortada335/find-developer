@@ -9,9 +9,7 @@ const Layout = () => {
       <Navbar />
       <AnnouncementBanners />
       <main className="flex-1">
-        <div className="container mx-auto w-full px-4">
           <Outlet />
-        </div>
       </main>
       <Footer />
     </div>

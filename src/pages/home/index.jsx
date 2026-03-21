@@ -2,8 +2,14 @@ import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import Section from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+} from "@/components/ui/card";
 import DeveloperCard from "@/components/developer/DeveloperCard";
 import FilterPanel from "@/components/developer/FilterPanel";
+import CompareModal from "@/components/developer/CompareModal";
 import { mockDevelopers } from "@/data/mock";
 import {
   Pagination,
@@ -13,7 +19,16 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { ArrowUp } from "lucide-react";
+import {
+  ArrowUp,
+  Users,
+  Star,
+  Search,
+  SlidersHorizontal,
+  GitCompare,
+  Mail,
+} from "lucide-react";
+import HeroSection from "@/components/layout/HeroSection";
 
 const ITEMS_PER_PAGE = 6;
 
@@ -26,13 +41,19 @@ const Home = () => {
     availability: "",
   });
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [showCompare, setShowCompare] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
 
   // Filter developers
   const filteredDevelopers = useMemo(() => {
     return mockDevelopers.filter((dev) => {
       if (
         filters.search &&
-        !dev.name.toLowerCase().includes(filters.search.toLowerCase())
+        !dev.name.toLowerCase().includes(filters.search.toLowerCase()) &&
+        !dev.skills.some((s) =>
+          s.toLowerCase().includes(filters.search.toLowerCase())
+        )
       )
         return false;
       if (filters.jobTitle && dev.jobTitle !== filters.jobTitle) return false;
@@ -51,6 +72,12 @@ const Home = () => {
     });
   }, [filters]);
 
+  // Counts
+  const totalDevelopers = mockDevelopers.length;
+  const recommendedCount = mockDevelopers.filter(
+    (d) => d.isRecommended
+  ).length;
+
   // Pagination
   const totalPages = Math.ceil(filteredDevelopers.length / ITEMS_PER_PAGE);
   const paginatedDevelopers = filteredDevelopers.slice(
@@ -64,24 +91,81 @@ const Home = () => {
     setCurrentPage(1);
   };
 
+  // Toggle developer selection for compare
+  const toggleSelect = (id) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  };
+
+  const selectedDevelopers = mockDevelopers.filter((d) =>
+    selectedIds.includes(d.id)
+  );
+
   return (
-    <Section className="h-auto min-h-0 gap-0">
-      {/* Hero Section */}
-      <div
-        id="hero"
-        className="w-full flex flex-col gap-4 items-center justify-center py-16 md:py-24 page-enter"
-      >
-        <h1 className="text-3xl md:text-5xl font-bold text-center bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-600 bg-clip-text text-transparent gradient-text-animated animate-fade-in">
-          Find Your Perfect Developer
-        </h1>
-        <p className="text-muted-foreground text-lg md:text-xl text-center max-w-2xl animate-slide-up">
-          Discover talented developers ready to bring your projects to life
-        </p>
-        <Link to="/register">
-          <Button className="mt-2 btn-glow animate-pulse-glow bg-purple-600 hover:bg-purple-700 text-white dark:bg-purple-600 dark:hover:bg-purple-700 dark:text-white transition duration-200">
-            Register as Developer
-          </Button>
-        </Link>
+    <>
+      <HeroSection
+        badge="Find developers"
+        title="Find the right developer for your project"
+        subtitle="Browse vetted developers, filter by skills and experience, and connect with the best match for your team."
+      />
+      <Section className="h-auto min-h-0 gap-0">
+      {/* Subscription CTA Banner */}
+      <div className="w-full py-8 md:py-10 page-enter">
+        <Card className="border-amber-500/30 bg-gradient-to-r from-amber-500/5 to-amber-600/5 dark:from-amber-500/10 dark:to-amber-600/10">
+          <CardContent className="pt-6 text-center space-y-3">
+            <h2 className="text-xl md:text-2xl font-bold">
+              Unlock direct contact details & CVs
+            </h2>
+            <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
+              Subscribers get access to developer phone numbers and resumes —
+              connect faster with the right talent for your team.
+            </p>
+            <Button
+              asChild
+              className="bg-amber-500 hover:bg-amber-600 text-black font-medium"
+            >
+              <a href="mailto:ht3aa2001@gmail.com?subject=Get+Access">
+                <Mail className="h-4 w-4 mr-2" />
+                Get access — contact ht3aa2001@gmail.com
+              </a>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Stats Section */}
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 animate-fade-in">
+        <Card className="overflow-hidden">
+          <CardContent className="pt-6 flex items-center gap-4">
+            <div className="h-14 w-14 rounded-full bg-amber-500/10 flex items-center justify-center shrink-0">
+              <Users className="h-7 w-7 text-amber-500" />
+            </div>
+            <div>
+              <p className="text-3xl md:text-4xl font-bold text-amber-500">
+                {totalDevelopers}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Developers in the system
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="overflow-hidden">
+          <CardContent className="pt-6 flex items-center gap-4">
+            <div className="h-14 w-14 rounded-full bg-amber-500/10 flex items-center justify-center shrink-0">
+              <Star className="h-7 w-7 text-amber-500" />
+            </div>
+            <div>
+              <p className="text-3xl md:text-4xl font-bold text-amber-500">
+                {recommendedCount}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Recommended developers
+              </p>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Main Content */}
@@ -89,22 +173,66 @@ const Home = () => {
         id="free-developers-section"
         className="w-full space-y-6 pb-12"
       >
-        {/* Filters */}
-        <FilterPanel filters={filters} onFilterChange={handleFilterChange} />
-
-        {/* Section Header */}
-        <div>
-          <h2 className="text-xl font-semibold">All Developers</h2>
-          <p className="text-sm text-muted-foreground">
-            Browse all registered developers
-          </p>
+        {/* Search Toolbar */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search by name, email, or skills..."
+              value={filters.search}
+              onChange={(e) =>
+                handleFilterChange({ ...filters, search: e.target.value })
+              }
+              className="pl-9"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground font-medium whitespace-nowrap">
+              {filteredDevelopers.length} developers
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => selectedIds.length >= 2 ? setShowCompare(true) : null}
+              className="gap-1.5"
+              disabled={selectedIds.length < 2}
+            >
+              <GitCompare className="h-4 w-4" />
+                Compare ({selectedIds.length})
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowFilters(!showFilters)}
+              className="gap-1.5"
+            >
+              <SlidersHorizontal className="h-4 w-4" />
+              Filters
+            </Button>
+          </div>
         </div>
+
+        {/* Filters */}
+        {showFilters && (
+          <FilterPanel filters={filters} onFilterChange={handleFilterChange} />
+        )}
 
         {/* Developer Grid */}
         {paginatedDevelopers.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {paginatedDevelopers.map((dev) => (
-              <DeveloperCard key={dev.id} developer={dev} />
+              <div key={dev.id} className="relative">
+                {/* Selection checkbox */}
+                <label className="absolute top-3 left-3 z-10 cursor-pointer">
+                  <Input
+                    type="checkbox"
+                    checked={selectedIds.includes(dev.id)}
+                    onChange={() => toggleSelect(dev.id)}
+                    className="h-4 w-4 rounded border-muted-foreground/50 accent-amber-500"
+                  />
+                </label>
+                <DeveloperCard developer={dev} />
+              </div>
             ))}
           </div>
         ) : (
@@ -190,7 +318,16 @@ const Home = () => {
           </Button>
         </div>
       </div>
+
+      {/* Compare Modal */}
+      {showCompare && selectedDevelopers.length >= 2 && (
+        <CompareModal
+          developers={selectedDevelopers}
+          onClose={() => setShowCompare(false)}
+        />
+      )}
     </Section>
+    </>
   );
 };
 

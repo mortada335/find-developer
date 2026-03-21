@@ -33,7 +33,7 @@ const AnnouncementBanner = ({ type = "info", children, storageKey }) => {
     <div
       className={`border-b px-4 py-2.5 text-sm ${styles[type]}`}
     >
-      <div className="container mx-auto flex items-center justify-between gap-3">
+      <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-3">
         <div className="flex items-center gap-2 flex-1 min-w-0">
           {icons[type]}
           <span className="truncate">{children}</span>
@@ -51,7 +51,7 @@ const AnnouncementBanner = ({ type = "info", children, storageKey }) => {
 
 const AnnouncementBanners = () => {
   return (
-    <div className="mt-14">
+    <div className="mt-[5.5rem]">
       <AnnouncementBanner type="info" storageKey="open-source">
         <span className="font-medium">Open Source!</span> DevConnect is open
         source. If you find it useful, give us a star on GitHub — it helps us

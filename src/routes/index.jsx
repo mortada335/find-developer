@@ -13,6 +13,7 @@ const About = lazy(() => import("@/pages/about"));
 const Badges = lazy(() => import("@/pages/badges"));
 const Charts = lazy(() => import("@/pages/charts"));
 const Blogs = lazy(() => import("@/pages/blogs"));
+const Hackathons = lazy(() => import("@/pages/hackathons"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 export const publicRoutes = [
@@ -30,6 +31,7 @@ export const publicRoutes = [
   { path: "/badges", element: <Badges /> },
   { path: "/charts", element: <Charts /> },
   { path: "/blogs", element: <Blogs /> },
+  { path: "/hackathons", element: <Hackathons /> },
   { path: "*", element: <NotFound /> },
 ];
 

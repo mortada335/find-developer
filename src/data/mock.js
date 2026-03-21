@@ -645,3 +645,71 @@ export const mockChartData = {
     { label: "Head of Software Development", count: 1 },
   ],
 };
+
+// Mock hackathon data
+export const mockHackathons = [
+  {
+    id: 1,
+    title: "Iraqi Developers Hackathon 2026",
+    slug: "iraqi-developers-hackathon-2026",
+    description:
+      "A nationwide hackathon bringing together the best developers in Iraq to solve real-world problems using modern technologies.",
+    startDate: "2026-04-15",
+    endDate: "2026-04-17",
+    status: "upcoming",
+    participantsCount: 48,
+    maxParticipants: 100,
+    location: "Baghdad, Iraq",
+    prizes: ["1st: $2,000", "2nd: $1,000", "3rd: $500"],
+    tags: ["Web Development", "AI", "Mobile"],
+    organizer: "DevConnect",
+  },
+  {
+    id: 2,
+    title: "Laravel Challenge",
+    slug: "laravel-challenge",
+    description:
+      "Build a complete web application using Laravel and Filament in 48 hours. Solo or team up to 3 members.",
+    startDate: "2026-05-10",
+    endDate: "2026-05-12",
+    status: "upcoming",
+    participantsCount: 22,
+    maxParticipants: 50,
+    location: "Online",
+    prizes: ["1st: $1,500", "2nd: $750"],
+    tags: ["Laravel", "PHP", "Filament"],
+    organizer: "DevConnect",
+  },
+  {
+    id: 3,
+    title: "Flutter UI Challenge",
+    slug: "flutter-ui-challenge",
+    description:
+      "Design and build the most beautiful and functional Flutter UI. Focus on creativity, animations, and user experience.",
+    startDate: "2026-03-01",
+    endDate: "2026-03-03",
+    status: "completed",
+    participantsCount: 35,
+    maxParticipants: 50,
+    location: "Online",
+    prizes: ["1st: $1,000", "2nd: $500"],
+    tags: ["Flutter", "Dart", "UI/UX"],
+    organizer: "DevConnect",
+  },
+  {
+    id: 4,
+    title: "API Design Sprint",
+    slug: "api-design-sprint",
+    description:
+      "Build scalable RESTful APIs with proper documentation, testing, and security. Teams of 2-4 developers.",
+    startDate: "2026-06-20",
+    endDate: "2026-06-22",
+    status: "upcoming",
+    participantsCount: 15,
+    maxParticipants: 40,
+    location: "Basra, Iraq",
+    prizes: ["1st: $1,200", "2nd: $600", "3rd: $300"],
+    tags: ["Backend", "REST API", "Node.js", "Laravel"],
+    organizer: "DevConnect",
+  },
+];

@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import Section from "@/components/layout/Section";
+import HeroSection from "@/components/layout/HeroSection";
 import {
   Card,
   CardContent,
@@ -64,16 +65,13 @@ const Charts = () => {
   const maxJobTitle = Math.max(...developersByJobTitle.map((d) => d.count));
 
   return (
-    <Section className="h-auto min-h-0">
-      {/* Header */}
-      <div className="w-full py-12 md:py-16 text-center">
-        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-600 bg-clip-text text-transparent">
-          Analytics & Statistics
-        </h1>
-        <p className="text-muted-foreground text-lg mt-3 max-w-2xl mx-auto">
-          Visual insights into our developer community and job market data
-        </p>
-      </div>
+    <>
+      <HeroSection
+        badge="Statistics"
+        title="Developer charts"
+        subtitle="Explore developer distribution by location, availability type, experience, and job title."
+      />
+      <Section className="h-auto min-h-0">
 
       <div className="w-full space-y-6 pb-12">
         {/* Summary Stats */}
@@ -216,6 +214,7 @@ const Charts = () => {
         </div>
       </div>
     </Section>
+    </>
   );
 };
 
