@@ -181,7 +181,7 @@ const Navbar = () => {
         </div>
       </nav>
     </header>
-    {/* Bug report banner — matches find-developer.com */}
+    {/* Bug report banner */}
     <div className="fixed top-14 left-0 right-0 z-40 bg-muted/80 backdrop-blur-sm border-b text-center py-1.5 text-xs text-muted-foreground">
       <Bug className="inline h-3.5 w-3.5 mr-1.5 -mt-0.5" />
       If you find any bug or error, please{" "}
