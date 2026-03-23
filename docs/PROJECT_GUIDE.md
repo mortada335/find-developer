@@ -1,7 +1,8 @@
-# Find Developer — Project Architecture Guide
+# DevConnect — Project Guide
 
-> **Purpose**: This guide explains every file in the project so you can understand the full codebase
-> and replicate these patterns in future projects.
+> **Project Name**: DevConnect (clone of find-developer.com)  
+> **Stack**: Vite + React + Tailwind CSS + shadcn/ui + Lucide Icons  
+> **Dev Server Port**: 5174 (`npm run dev`)
 
 ---
 
@@ -9,14 +10,14 @@
 
 1. [Project Overview](#project-overview)
 2. [Folder Structure](#folder-structure)
-3. [Entry Point Files](#1-entry-point-files)
-4. [Routing](#2-routing)
-5. [Layout Components](#3-layout-components)
-6. [Developer Components](#4-developer-components)
-7. [Pages](#5-pages)
-8. [Data & Theming](#6-data--theming)
-9. [shadcn/ui Components](#7-shadcnui-components)
-10. [Key Patterns to Reuse](#key-patterns-to-reuse)
+3. [Pages & Routes](#pages--routes)
+4. [Layout Components](#layout-components)
+5. [Developer Components](#developer-components)
+6. [Data Layer](#data-layer)
+7. [Theming System](#theming-system)
+8. [shadcn/ui Reference](#shadcnui-reference)
+9. [Key Patterns](#key-patterns)
+10. [Backend Integration Guide](#backend-integration-guide)
 
 ---
 
@@ -32,14 +33,15 @@ Tech Stack:
 └── Lucide React  → Icon library
 ```
 
-**How data flows:**
-
+**Data flow:**
 ```
-main.jsx → App.jsx → Layout → Navbar + Page + Footer
+main.jsx → App.jsx → Layout → Navbar + AnnouncementBanners + Page + Footer
                                           ↑
                                     routes/index.jsx
                                     (lazy-loaded pages)
 ```
+
+**Authentication Context:** `AuthContext` provides `user`, `isAuthenticated`, and `logout()` to all components.
 
 ---
 
@@ -47,761 +49,432 @@ main.jsx → App.jsx → Layout → Navbar + Page + Footer
 
 ```
 src/
-├── main.jsx                    ← App entry point
+├── main.jsx                    ← Entry point
 ├── App.jsx                     ← Route configuration
-├── index.css                   ← Global styles + theme variables
+├── index.css                   ← Global styles + CSS theme variables
 │
-├── context/theme/              ← Theme (dark/light mode)
-│   ├── ThemeProvider.jsx
-│   ├── ThemeContext.jsx
-│   └── index.js
+├── context/
+│   ├── AuthContext.jsx         ← Auth state (user, isAuthenticated, logout)
+│   └── theme/
+│       ├── ThemeProvider.jsx   ← Dark/light mode provider
+│       ├── ThemeContext.jsx
+│       └── index.js
 │
 ├── routes/
-│   └── index.jsx               ← All routes defined here
+│   └── index.jsx               ← All public routes (lazy-loaded)
 │
 ├── components/
-│   ├── layout/                 ← Shared layout components
-│   │   ├── Layout.jsx          ← Page wrapper (Navbar + content + Footer)
-│   │   ├── Navbar.jsx          ← Top navigation bar
-│   │   ├── Footer.jsx          ← Bottom footer
-│   │   ├── Section.jsx         ← Reusable page section wrapper
-│   │   ├── ModeToggle.jsx      ← Dark/light theme switcher
-│   │   └── AnnouncementBanners.jsx ← Dismissible info banners
+│   ├── layout/
+│   │   ├── Layout.jsx          ← Wrapper: Navbar + Outlet + Footer
+│   │   ├── Navbar.jsx          ← Top nav + bug report banner + mobile sheet
+│   │   ├── Footer.jsx          ← Footer with Support Us + Qi card + social icons
+│   │   ├── Section.jsx         ← Page section wrapper (full-width, padded)
+│   │   ├── HeroSection.jsx     ← Reusable hero with duck emojis + starry bg
+│   │   ├── ModeToggle.jsx      ← Dark/light/system theme switcher
+│   │   └── AnnouncementBanners.jsx ← Two dismissible banners (Open Source + Email)
 │   │
-│   ├── developer/              ← Developer-specific components
-│   │   ├── DeveloperCard.jsx   ← Card showing developer info
-│   │   ├── FilterPanel.jsx     ← Search & filter controls
-│   │   └── BadgeChip.jsx       ← Colored badge with icon
+│   ├── developer/
+│   │   ├── DeveloperCard.jsx   ← Developer card (badge icons, recommendations, job pill)
+│   │   ├── FilterPanel.jsx     ← Collapsible search/filter sidebar
+│   │   ├── BadgeChip.jsx       ← Colored badge chip with icon
+│   │   └── CompareModal.jsx    ← Side-by-side developer comparison dialog
 │   │
-│   └── ui/                     ← shadcn/ui components (auto-generated)
-│       ├── button.jsx
-│       ├── card.jsx
-│       ├── badge.jsx
-│       ├── input.jsx
-│       ├── pagination.jsx
-│       ├── sheet.jsx           ← Mobile slide-out menu
-│       ├── dropdown-menu.jsx
-│       └── ...
+│   └── ui/                     ← shadcn/ui (auto-generated, don't edit)
+│       ├── button.jsx, card.jsx, badge.jsx, input.jsx
+│       ├── dialog.jsx, sheet.jsx, pagination.jsx
+│       └── separator.jsx, dropdown-menu.jsx, ...
 │
-├── pages/                      ← One folder per page
-│   ├── home/index.jsx
-│   ├── services/index.jsx
-│   ├── blogs/index.jsx
-│   ├── plans/index.jsx
-│   ├── recommended/index.jsx
-│   ├── special-needs/index.jsx
-│   ├── register/index.jsx
-│   ├── login/index.jsx
-│   ├── developer-profile/index.jsx
-│   ├── about/index.jsx
-│   ├── badges/index.jsx
-│   ├── charts/index.jsx
-│   └── not-found/index.jsx
+├── pages/
+│   ├── home/index.jsx          ← Main developer listing + filters + compare
+│   ├── developer-profile/index.jsx ← Two-column profile page
+│   ├── blogs/index.jsx         ← Blog post grid with hero
+│   ├── badges/index.jsx        ← Badge catalog with toggle descriptions
+│   ├── charts/index.jsx        ← Stats charts (bar, line, donut, horizontal bar)
+│   ├── hackathons/index.jsx    ← Hackathon cards
+│   ├── services/index.jsx      ← Service provider listings
+│   ├── register/index.jsx      ← Registration form
+│   ├── login/index.jsx         ← Login form
+│   ├── profile/index.jsx       ← Authenticated user profile
+│   ├── about/index.jsx         ← Privacy policy / about page
+│   ├── recommended/index.jsx   ← Recommended developers
+│   ├── special-needs/index.jsx ← Special needs page
+│   ├── plans/index.jsx         ← Pricing plans
+│   └── not-found/index.jsx     ← 404 page
 │
 └── data/
-    └── mock.js                 ← Fake data (replace with API later)
+    └── mock.js                 ← All fake data (replace with API calls for backend)
 ```
 
 ---
 
-## 1. Entry Point Files
+## Pages & Routes
 
-### `main.jsx` — The Starting Point
-
-```jsx
-// This is the VERY FIRST file that runs when your app loads.
-// Think of it as plugging in your app's power cord.
-
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'              // ← Load all CSS first
-import App from './App.jsx'
-import { BrowserRouter } from 'react-router'
-import { ThemeProvider } from './context/theme'
-
-createRoot(document.getElementById('root')).render(
-  <StrictMode>                     {/* Catches bugs in development */}
-    <BrowserRouter>                {/* Enables URL-based navigation */}
-      <ThemeProvider               {/* Makes dark/light mode available everywhere */}
-        defaultTheme="dark"
-        storageKey="vite-ui-theme"
-      >
-        <App />                    {/* Your actual app */}
-      </ThemeProvider>
-    </BrowserRouter>
-  </StrictMode>,
-)
-```
-
-**Why this order matters:**
-1. `BrowserRouter` must wrap everything that uses `<Link>` or `useLocation()`
-2. `ThemeProvider` must wrap everything that uses `useTheme()`
-3. `App` goes inside both so it has access to routing AND theme
+| Route | Component | Description |
+|-------|-----------|-------------|
+| `/` | `home/index.jsx` | Developer listing with search, filters, compare |
+| `/developers/:slug` | `developer-profile/index.jsx` | Full developer profile |
+| `/blogs` | `blogs/index.jsx` | Blog posts grid |
+| `/badges` | `badges/index.jsx` | Badge catalog |
+| `/charts` | `charts/index.jsx` | Developer statistics charts |
+| `/hackathons` | `hackathons/index.jsx` | Hackathon listings |
+| `/services` | `services/index.jsx` | Service provider listings |
+| `/register` | `register/index.jsx` | Registration |
+| `/admin/login` | `login/index.jsx` | Login |
+| `/profile` | `profile/index.jsx` | My profile (authenticated) |
+| `/about` | `about/index.jsx` | About / Privacy Policy |
+| `*` | `not-found/index.jsx` | 404 catch-all |
 
 ---
 
-### `App.jsx` — Route Setup
+## Layout Components
 
+### `Layout.jsx`
 ```jsx
-// App.jsx decides WHICH page to show based on the URL.
-// It also wraps all pages in a Layout (Navbar + Footer).
-
-import { Suspense } from "react"
-import { Route, Routes } from "react-router-dom"
-import { publicRoutes } from "./routes"
-import Layout from "./components/layout/Layout"
-
-function App() {
-  return (
-    <>
-      {/* Suspense shows a loading spinner while lazy pages are downloading */}
-      <Suspense fallback={<LoadingSpinner />}>
-        <Routes>
-          {/* All pages share the same Layout (Navbar + Footer) */}
-          <Route path="/" element={<Layout />}>
-            {publicRoutes.map(({ path, element, index }) => (
-              <Route key={path} path={path} element={element} index={index} />
-            ))}
-          </Route>
-        </Routes>
-      </Suspense>
-    </>
-  )
-}
-```
-
-**Key concept — Nested Routes:**
-```
-<Route path="/" element={<Layout />}>     ← Layout always renders
-  <Route path="/" element={<Home />} />   ← Home renders INSIDE Layout
-  <Route path="/services" element={<Services />} />
-</Route>
-```
-The `<Outlet />` inside Layout is where the child page renders.
-
----
-
-## 2. Routing
-
-### `routes/index.jsx` — Route Definitions
-
-```jsx
-import { lazy } from "react";
-
-// lazy() = don't download the page code until user visits it
-// This makes the initial app load FAST
-const Home = lazy(() => import("@/pages/home"));
-const Services = lazy(() => import("@/pages/services"));
-// ... more pages
-
-export const publicRoutes = [
-  { path: "/", element: <Home />, index: true },  // index = default route
-  { path: "/services", element: <Services /> },
-  { path: "/developers/:slug", element: <DeveloperProfile /> },
-  // :slug = dynamic parameter, e.g. /developers/hussein-ghadhban
-  { path: "*", element: <NotFound /> },  // * = catch-all for 404s
-];
-```
-
-**Pattern to reuse:**
-- `lazy()` + `<Suspense>` = code splitting (faster initial load)
-- `:slug` = dynamic URL parameters (access with `useParams()`)
-- `*` = 404 catch-all (always put LAST)
-
----
-
-## 3. Layout Components
-
-### `Layout.jsx` — The Page Wrapper
-
-```jsx
-// Every page in the app renders INSIDE this component.
-// It provides the consistent Navbar → Content → Footer structure.
-
-const Layout = () => {
-  return (
-    <div className="flex min-h-dvh flex-col">  {/* Full viewport height */}
-      <Navbar />                                {/* Fixed at top */}
-      <AnnouncementBanners />                   {/* Below navbar */}
-      <main className="flex-1">                 {/* Stretches to fill space */}
-        <div className="container mx-auto w-full px-4">
-          <Outlet />                            {/* ← THE PAGE RENDERS HERE */}
-        </div>
-      </main>
-      <Footer />                                {/* Sticks to bottom */}
-    </div>
-  )
-}
-```
-
-**Sticky Footer trick:**
-- `min-h-dvh` = fill at least the full screen height
-- `flex flex-col` = stack children vertically
-- `flex-1` on `<main>` = main grows to fill all remaining space
-- Result: Footer is always at the bottom, even on short pages
-
----
-
-### `Navbar.jsx` — Top Navigation
-
-**Key patterns:**
-```jsx
-// 1. Active link highlighting
-const { pathname } = useLocation();
-// Compare current URL with link URL:
-className={pathname === to ? "text-primary" : "text-muted-foreground"}
-
-// 2. Glassmorphism effect
-className="bg-background/80 backdrop-blur-md"
-// bg-background/80  = 80% opacity background
-// backdrop-blur-md   = blur what's behind it
-
-// 3. Mobile hamburger menu (using shadcn Sheet)
-<Sheet>                        {/* Slide-out panel */}
-  <SheetTrigger>               {/* Button that opens it */}
-    <Menu />                   {/* Hamburger icon */}
-  </SheetTrigger>
-  <SheetContent side="right">  {/* Panel slides from right */}
-    {/* Mobile nav links go here */}
-  </SheetContent>
-</Sheet>
-
-// 4. Responsive: show/hide
-<div className="hidden md:flex">  {/* Hidden on mobile, visible on md+ */}
-<Button className="md:hidden">   {/* Visible on mobile, hidden on md+ */}
-```
-
----
-
-### `Footer.jsx` — Bottom Navigation
-
-Simple component with:
-- Donation text (Qi Card number)
-- Brand logo + GitHub link
-- Navigation links (About, Charts, Badges, Plans, Services)
-- Copyright text
-
----
-
-### `Section.jsx` — Page Section Wrapper
-
-```jsx
-// Wraps page content with consistent padding and max-width.
-// Used by every page for consistent layout.
-
-const Section = ({ children, className }) => (
-  <section className={cn(
-    "w-full max-w-7xl mx-auto py-4",  // centered, padded
-    className
-  )}>
-    {children}
-  </section>
-)
-```
-
----
-
-### `ModeToggle.jsx` — Theme Switcher
-
-```jsx
-// Dropdown button in the Navbar that lets users pick: Light / Dark / System
-// Uses useTheme() from ThemeProvider to change theme
-
-const { setTheme } = useTheme()
-// setTheme("dark")   → forces dark mode
-// setTheme("light")  → forces light mode
-// setTheme("system") → follows OS preference
-```
-
----
-
-### `AnnouncementBanners.jsx` — Dismissible Banners
-
-```jsx
-// Two notification banners below the navbar.
-// Users can dismiss them with X button. Dismissal is saved to localStorage.
-
-// Pattern: localStorage for persistence
-const [dismissed, setDismissed] = useState(() => {
-  return localStorage.getItem(`banner-${storageKey}`) === "true";
-});
-
-// Pattern: Conditional rendering
-if (dismissed) return null; // Don't render if dismissed
-
-// Pattern: Style variants using a map
-const styles = {
-  info: "bg-emerald-500/10 text-emerald-700",     // Green
-  warning: "bg-amber-500/10 text-amber-700",       // Yellow
-};
-className={styles[type]}  // Pick style based on type prop
-```
-
----
-
-## 4. Developer Components
-
-### `DeveloperCard.jsx` — The Star Component ⭐
-
-This is the most complex component. Here's every technique it uses:
-
-```jsx
-// 1. FIXED-HEIGHT CARD with pinned button
-<Card className="flex flex-col h-full">
-  <CardHeader className="shrink-0">    {/* Fixed: never shrinks */}
-  <CardContent className="flex-1">     {/* Grows: fills available space */}
-  <CardFooter className="shrink-0 mt-auto">  {/* Pinned to bottom */}
-```
-
-**Why this works:**
-```
-┌────────────────────┐
-│ Header (shrink-0)  │  ← Always same height
-├────────────────────┤
-│                    │
-│ Content (flex-1)   │  ← Stretches to fill
-│                    │
-├────────────────────┤
-│ Footer (mt-auto)   │  ← Pushed to bottom
-└────────────────────┘
-```
-
-```jsx
-// 2. BIO TEXT with fixed space (even when empty)
-<p className="line-clamp-3 min-h-[3.75rem]">
-  {bio || "\u00A0"}   {/* \u00A0 = non-breaking space (keeps height) */}
-</p>
-// line-clamp-3   = max 3 lines, adds "..." if longer
-// min-h-[3.75rem] = always reserves space for 3 lines
-
-// 3. GROUP HOVER — children react to parent hover
-<Card className="group ...">
-  <div className="group-hover:border-purple-500/50">
-    {/* Avatar border glows when CARD is hovered */}
-  </div>
-</Card>
-
-// 4. TRUNCATE — prevent long names from breaking layout
-<CardTitle className="truncate">
-  {name}  {/* "Karrar Mohammed Hamid Al-Du..." */}
-</CardTitle>
-
-// 5. LINKS row with consistent spacing
-<div className="flex items-center gap-2 flex-wrap min-h-[1.25rem]">
-  {/* min-h ensures row takes space even if no links */}
-  {portfolioUrl && <a>Portfolio</a>}
-  {githubUrl && <a>GitHub</a>}
+// Wraps every page. Full-width, no container constraint.
+<div className="flex min-h-dvh flex-col">
+  <Navbar />              {/* Fixed at top (h-14) */}
+  <AnnouncementBanners /> {/* Stacked below navbar (mt-[5.5rem]) */}
+  <main className="flex-1">
+    <Outlet />           {/* Page renders here */}
+  </main>
+  <Footer />
 </div>
-
-// 6. CONDITIONAL RENDERING
-{phone && (              // Only show phone if developer has one
-  <a href={`tel:${phone}`}>
-    <Phone /> {phone}
-  </a>
-)}
 ```
+
+> ⚠️ **Important**: No `container` wrapper on `<main>`. Each page/Section handles its own padding. This avoids the side-gap problem.
+
+### `Navbar.jsx`
+- Brand: **DevConnect** + GitHub icon
+- Nav links: Home | Blog | Badges | Hackathons | Charts
+- Right: Sign In (text link) | Sign Up (amber outlined button) | Theme toggle
+- Mobile: shadcn `Sheet` slide-out from right
+- **Bug report banner**: thin bar below navbar (`fixed top-14 z-40`)
+- Auth: shows user avatar + logout when `isAuthenticated`
+
+### `Footer.jsx`
+- Top row: Brand + nav links (Home, Privacy policy, Blog, Badges, Hackathons, Support, Sign In, Sign Up)
+- **Support Us section**: ❤️ icon + description + Qi card number box (`5862997060`)
+- Bottom row: copyright + social icons (GitHub, Instagram, LinkedIn, Telegram)
+
+### `Section.jsx`
+```jsx
+// Full-width, vertically padded section wrapper
+<section className="font-roboto flex flex-col w-full h-dvh min-h-full max-h-fit justify-start py-4 px-4">
+  {children}
+</section>
+```
+Use `className` prop to override (e.g. `className="h-auto min-h-0"` for content pages).
+
+### `HeroSection.jsx`
+```jsx
+// Reusable hero used on every page
+<HeroSection
+  badge="Find developers"          // Label in the pill badge
+  title="Find the right developer for your project"
+  subtitle="Browse vetted developers..."
+/>
+```
+Features: dot-grid dark background, floating 🦆 duck emojis, amber pill badge, scroll indicator.
+
+### `AnnouncementBanners.jsx`
+Two dismissible banners saved to localStorage:
+1. **Open Source** (green) — links to GitHub
+2. **Important** (amber) — email check reminder
 
 ---
 
-### `FilterPanel.jsx` — Search & Filters
+## Developer Components
 
-```jsx
-// 1. COLLAPSIBLE CARD
-const [isOpen, setIsOpen] = useState(false);
+### `DeveloperCard.jsx`
+The main card shown in the developer grid.
 
-<CardHeader onClick={() => setIsOpen(!isOpen)}>  {/* Click to toggle */}
-  Filters {isOpen ? <ChevronUp /> : <ChevronDown />}
-</CardHeader>
-{isOpen && <CardContent>...</CardContent>}        {/* Only show if open */}
+**Structure:**
+```
+┌─────────────────────────────────────┐
+│  □ (select checkbox)   ⭐Recommended  │  ← amber tag if isRecommended
+│  [Badge icons row]                   │  ← colored icon chips per badge
+│  ◯ Avatar   Name (link)             │
+│             Job Title (bordered pill)│
+├─────────────────────────────────────┤
+│  ● Available  Freelance  Remote      │  ← availability tags
+│  🧳 4 years experience               │
+│  📍 Baghdad                          │
+│  👍 3 Recommendations (amber)        │
+│  Bio text (3 lines max)             │
+│  Links: Portfolio | GitHub | LinkedIn│
+├─────────────────────────────────────┤
+│  [View Full Profile] button          │  ← links to /developers/:slug
+└─────────────────────────────────────┘
+```
 
-// 2. FILTER STATE — lifted up to parent (Home page)
-// FilterPanel doesn't OWN the filter state, it receives it as props:
-const FilterPanel = ({ filters, onFilterChange }) => {
-  const updateFilter = (key, value) => {
-    onFilterChange({ ...filters, [key]: value });  // Notify parent
-  };
+**Key props from `mock.js`:**
+```js
+{
+  id, slug, name, avatar, jobTitle, bio,
+  skills, experience, experienceYears,
+  availability,     // "Available"
+  availabilityType, // "Freelance" / "Full-time" / "Remote"
+  location,         // city name
+  isRecommended,    // boolean → shows ⭐ tag
+  badges,           // array of badge slugs
+  recommendations,  // array of recommendation objects
+  portfolioUrl, githubUrl, linkedinUrl, email, phone
 }
+```
 
-// 3. SKILL TAG TOGGLE
-const toggleSkill = (skill) => {
-  const current = filters.skills || [];
-  const updated = current.includes(skill)
-    ? current.filter(s => s !== skill)  // Remove if already selected
-    : [...current, skill];              // Add if not selected
-  updateFilter("skills", updated);
-};
+### `FilterPanel.jsx`
+Collapsible sidebar/card with:
+- Search by name/skills
+- Job title dropdown
+- Skills tags (toggle multi-select)
+- Location filter
+- Availability type filter
+- AI Prompt generator (copy to clipboard)
+- Clear all filters button
 
-// Styling active vs inactive:
-className={isActive
-  ? "bg-purple-600 text-white"        // Selected
-  : "hover:bg-purple-500/10"          // Not selected
-}
+State is **lifted to parent** (Home page) — FilterPanel only reads/calls `onFilterChange`.
 
-// 4. AI PROMPT with clipboard
-const handleCopyPrompt = async () => {
-  await navigator.clipboard.writeText(aiPrompt);
-  setCopied(true);
-  setTimeout(() => setCopied(false), 2000);  // Reset after 2s
-};
+### `BadgeChip.jsx`
+Maps badge slugs → colored badges with icons:
+```
+soft-skills          → blue  mic icon
+experience-validated → green rocket icon
+passion-developer    → yellow battery icon
+platform-contributor → purple users icon
+platform-marketer    → pink chart icon
+the-founder          → orange star icon
+```
 
-// 5. useMemo — recalculate only when filters change
-const aiPrompt = useMemo(() => {
-  // Build prompt string from current filters
-  return `Search for developers on find-developer.com...`;
-}, [filters]);  // Only re-runs when filters change
+### `CompareModal.jsx`
+Side-by-side comparison dialog. Opens when 2+ developer checkboxes are selected on home page.
+
+---
+
+## Developer Profile Page
+
+**Route:** `/developers/:slug`
+
+Layout matches find-developer.com:
+```
+← Back to Search
+
+[Initials Avatar]  Name
+                   Job Title
+                   [Badge icon chips]
+
+┌─── Stats Bar ───────────────────────────────┐
+│ 🧳 4 Years Experience  📍 Baghdad  ● Available  👍 3 Recommendations │
+└─────────────────────────────────────────────┘
+
+┌─── Left (2/3) ───────────┐  ┌─── Quick Info Sidebar (1/3) ───┐
+│ About section            │  │ Role: Full Stack Developer       │
+│ Get In Touch buttons     │  │ Experience: 4 Years              │
+│   [Email] [GitHub]       │  │ Location: Baghdad                │
+│   [LinkedIn]             │  │ Availability: Available          │
+│ Skills & Technologies    │  │                                   │
+│   [React] [Laravel] ...  │  │ [Contact Now] (amber)            │
+│ Recommendations (N)      │  │ [Login to Chat]                  │
+│   quote cards            │  │ [Recommend]                      │
+└──────────────────────────┘  └───────────────────────────────────┘
+```
+
+Skill tags use **amber background** (`bg-amber-500 text-black`).
+
+---
+
+## Data Layer
+
+### `data/mock.js`
+All mock data lives here. When connecting to the Laravel API, replace these imports with API calls.
+
+**Exports:**
+```js
+export const mockDevelopers = [ ... ]     // Array of developer objects
+export const badgeInfo = { ... }          // Slug → { label, color }
+export const filterOptions = { ... }      // jobTitles, skills, locations, availabilityTypes
+export const mockBlogs = [ ... ]          // Blog post objects
+export const mockBadges = [ ... ]         // Badge objects with descriptions
+export const mockHackathons = [ ... ]     // Hackathon objects
+export const mockChartData = { ... }      // Chart datasets
+```
+
+**API Replacement Pattern:**
+```jsx
+// BEFORE (mock):
+import { mockDevelopers } from "@/data/mock";
+
+// AFTER (real API with React Query):
+import { useQuery } from "@tanstack/react-query";
+const { data, isLoading } = useQuery({
+  queryKey: ["developers", filters],
+  queryFn: () => fetch(`/api/developers?${new URLSearchParams(filters)}`).then(r => r.json()),
+});
 ```
 
 ---
 
-### `BadgeChip.jsx` — Colored Badge
+## Theming System
 
+**Dark mode default.** Theme stored in localStorage under `vite-ui-theme`.
+
+```
+ThemeProvider adds "dark" or "light" class to <html>
+Tailwind's dark: prefix activates based on that class
+```
+
+**Color variables** (in `index.css`):
+| CSS Variable | Purpose |
+|---|---|
+| `--background` | Page background |
+| `--foreground` | Primary text |
+| `--primary` | Brand accent (amber: `#f59e0b`) |
+| `--muted-foreground` | Secondary/dimmed text |
+| `--card` | Card backgrounds |
+| `--border` | Border color |
+
+**Use theme-aware colors:**
 ```jsx
-// Maps badge slugs to visual styles
+// ✅ Correct
+<p className="text-foreground">Primary text</p>
+<p className="text-muted-foreground">Secondary text</p>
+<div className="bg-background">Page bg</div>
+<div className="bg-card">Card bg</div>
 
-// 1. Data-driven design — styles come from mock.js
-const badgeInfo = {
-  "soft-skills": {
-    label: "Soft Skills",
-    color: "bg-blue-500/10 text-blue-600 border-blue-500/20",
-  },
-  // ...
-};
-
-// 2. Icon mapping
-const badgeIcons = {
-  "soft-skills": Heart,
-  "experience-validated": CheckCircle,
-  "platform-contributor": Star,
-  "platform-marketer": Megaphone,
-};
-
-// 3. Usage
-<Badge variant="outline" className={info.color}>
-  <Icon className="h-3 w-3" />
-  {info.label}
-</Badge>
+// ✅ Amber accent (primary)
+<button className="bg-amber-500 hover:bg-amber-600 text-black">Click</button>
 ```
 
 ---
 
-## 5. Pages
+## shadcn/ui Reference
 
-### `home/index.jsx` — The Main Page
+| Component | Import | Used In |
+|---|---|---|
+| `Button` | `@/components/ui/button` | Everywhere |
+| `Card, CardHeader, CardContent, CardFooter` | `@/components/ui/card` | DeveloperCard, FilterPanel, Profile |
+| `Badge` | `@/components/ui/badge` | BadgeChip, Skills |
+| `Input` | `@/components/ui/input` | Search, FilterPanel |
+| `Dialog` | `@/components/ui/dialog` | CompareModal |
+| `Sheet` | `@/components/ui/sheet` | Mobile Navbar menu |
+| `Pagination` | `@/components/ui/pagination` | Home page |
+| `DropdownMenu` | `@/components/ui/dropdown-menu` | ModeToggle |
+| `Separator` | `@/components/ui/separator` | Profile page |
 
+**Add new component:**
+```bash
+npx shadcn@latest add <component-name>
+```
+
+---
+
+## Key Patterns
+
+### 1. Lazy-loaded Routes
 ```jsx
-// Structure:
-// 1. Hero Section     → Gradient title + CTA button
-// 2. FilterPanel      → Collapsible search/filters
-// 3. Developer Grid   → 3-column responsive grid of DeveloperCards
-// 4. Pagination       → Page numbers
-// 5. Back to Top      → Scroll button
+const Home = lazy(() => import("@/pages/home"));
+// Wrap app in <Suspense fallback={<Spinner />}>
+```
 
-// KEY PATTERNS:
+### 2. Fixed-Height Card (aligned buttons)
+```jsx
+<Card className="flex flex-col h-full">
+  <CardHeader className="shrink-0" />   {/* Fixed */}
+  <CardContent className="flex-1" />    {/* Grows */}
+  <CardFooter className="shrink-0 mt-auto" />  {/* Pinned to bottom */}
+</Card>
+```
 
-// A. Client-side filtering with useMemo
-const filteredDevelopers = useMemo(() => {
+### 3. Client-Side Filtering with useMemo
+```jsx
+const filtered = useMemo(() => {
   return mockDevelopers.filter(dev => {
-    if (filters.search && !dev.name.toLowerCase().includes(...)) return false;
+    if (filters.search && !dev.name.toLowerCase().includes(filters.search.toLowerCase())) return false;
     if (filters.jobTitle && dev.jobTitle !== filters.jobTitle) return false;
-    // ... more filters
     return true;
   });
-}, [filters]);  // Re-filters only when filters change
+}, [filters]);
+```
 
-// B. Client-side pagination
+### 4. Client-Side Pagination
+```jsx
 const ITEMS_PER_PAGE = 6;
 const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
 const visible = filtered.slice(
   (currentPage - 1) * ITEMS_PER_PAGE,
   currentPage * ITEMS_PER_PAGE
 );
-
-// C. Reset page when filters change
-const handleFilterChange = (newFilters) => {
-  setFilters(newFilters);
-  setCurrentPage(1);  // Go back to page 1
-};
-
-// D. Responsive grid
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-  {/* 1 col mobile → 2 cols tablet → 3 cols desktop */}
-</div>
-
-// E. Gradient text
-<h1 className="bg-gradient-to-r from-purple-600 to-purple-800
-  bg-clip-text text-transparent">
-  Find Your Perfect Developer
-</h1>
-// bg-gradient-to-r    = gradient going left → right
-// from-/to-           = gradient colors
-// bg-clip-text        = clip gradient to text shape
-// text-transparent    = make text color see-through (shows gradient)
 ```
 
----
-
-### `services/index.jsx` — Services Page
-
+### 5. Amber Color Tints
 ```jsx
-// Displays service providers with expandable service details.
-
-// KEY PATTERNS:
-
-// A. Expandable accordion
-const [expandedId, setExpandedId] = useState(null);
-
-const toggle = (id) => {
-  setExpandedId(expandedId === id ? null : id);  // Toggle open/close
-};
-
-{expandedId === service.id && (
-  <div>
-    {service.features.map(f => <li>{f}</li>)}  {/* Show details */}
-  </div>
-)}
-
-// B. mailto: links with pre-filled subject
-<a href="mailto:email@example.com?subject=Service+Inquiry&body=Hello">
-  Contact Us
-</a>
+bg-amber-500/10    // 10% = very subtle
+border-amber-500/30  // subtle border
+text-amber-500     // amber text
+bg-amber-500 text-black  // solid amber button
 ```
 
----
-
-### Page Stubs (Plans, Recommended, etc.)
-
-All remaining pages follow the same simple pattern:
-
+### 6. Group Hover
 ```jsx
-import Section from "@/components/layout/Section";
-
-const PageName = () => {
-  return (
-    <Section>
-      <h1 className="text-3xl font-bold">Page Title</h1>
-      <p className="text-muted-foreground mt-2">
-        Description text.
-      </p>
-    </Section>
-  );
-};
-
-export default PageName;
-```
-
-These are **stubs** — replace the content with actual UI when you build each page.
-
----
-
-## 6. Data & Theming
-
-### `data/mock.js` — Fake Data
-
-```jsx
-// This file contains ALL the fake data for the app.
-// When you connect to a real API later, you replace
-// imports from mock.js with API calls.
-
-export const mockDevelopers = [
-  {
-    id: 1,                          // Unique ID
-    slug: "hussein-ghadhban",       // URL-friendly name
-    name: "Hussein Ghadhban",       // Display name
-    avatar: null,                   // Image URL (null = show placeholder)
-    jobTitle: "Full Stack Developer",
-    bio: "Long description...",
-    skills: ["React", "Laravel"],   // For filtering
-    experienceYears: 5,
-    expectedSalary: null,           // Hidden on the card
-    availabilityType: "full-time",  // For filtering
-    location: "Baghdad",            // For filtering
-    phone: "0771...",               // Optional
-    email: "dev@email.com",         // Optional
-    portfolioUrl: "https://...",    // Optional
-    githubUrl: "https://...",       // Optional
-    linkedinUrl: "https://...",     // Optional
-    badges: ["soft-skills", "experience-validated"],
-    projects: [],
-    recommendations: [],
-  },
-  // ... more developers
-];
-
-export const badgeInfo = {
-  "soft-skills": {
-    label: "Soft Skills",
-    color: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
-  },
-  // ... each badge has a label + color scheme
-};
-
-export const filterOptions = {
-  jobTitles: ["Full Stack Developer", "Backend Developer", ...],
-  skills: ["React", "Laravel", "Node.js", ...],
-  locations: ["Baghdad", "Basra", ...],
-  availabilityTypes: ["full-time", "freelance", ...],
-};
-```
-
----
-
-### `context/theme/ThemeProvider.jsx` — Dark/Light Mode
-
-```jsx
-// HOW IT WORKS:
-// 1. Reads saved theme from localStorage (or uses default "dark")
-// 2. Adds "dark" or "light" class to <html> element
-// 3. Tailwind's dark: prefix activates based on that class
-
-export default function ThemeProvider({ children, defaultTheme, storageKey }) {
-  const [theme, setTheme] = useState(
-    () => localStorage.getItem(storageKey) || defaultTheme
-  );
-
-  useEffect(() => {
-    const root = window.document.documentElement;  // <html>
-    root.classList.remove("light", "dark");
-
-    if (theme === "system") {
-      // Check OS preference
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-        .matches ? "dark" : "light";
-      root.classList.add(systemTheme);
-    } else {
-      root.classList.add(theme);  // Add "dark" or "light" to <html>
-    }
-  }, [theme]);
-
-  // Provide theme + setter to all children via React Context
-  return (
-    <ThemeProviderContext.Provider value={{ theme, setTheme }}>
-      {children}
-    </ThemeProviderContext.Provider>
-  );
-}
-```
-
-**How dark mode works in Tailwind:**
-```jsx
-// In your CSS:
-.dark .bg-background { background: #0a0a0a; }
-.light .bg-background { background: #ffffff; }
-
-// In your JSX — use dark: prefix:
-<div className="bg-white dark:bg-gray-900">
-  <p className="text-black dark:text-white">Hello</p>
-</div>
-```
-
----
-
-### `index.css` — Global Styles & Theme Variables
-
-```css
-/* Tailwind imports */
-@import "tailwindcss";
-
-/* Theme variables using CSS custom properties */
-:root {
-  --background: oklch(1 0 0);      /* Light mode: white */
-  --foreground: oklch(0.145 0 0);  /* Light mode: dark text */
-  --primary: oklch(0.546 0.245 262.881);  /* Purple */
-  /* ... more variables */
-}
-
-.dark {
-  --background: oklch(0.145 0 0);  /* Dark mode: near-black */
-  --foreground: oklch(0.985 0 0);  /* Dark mode: white text */
-  /* ... dark overrides */
-}
-
-/* These variables are used by shadcn/ui components automatically */
-/* bg-background → uses --background */
-/* text-foreground → uses --foreground */
-/* bg-primary → uses --primary */
-```
-
----
-
-## 7. shadcn/ui Components
-
-These are in `components/ui/`. **Don't edit them directly** — they're generated by
-`npx shadcn@latest add <component>`. Key ones used:
-
-| Component | What It Does | Used In |
-|---|---|---|
-| `Button` | Styled button with variants | Everywhere |
-| `Card` | Container with header/content/footer | DeveloperCard, FilterPanel |
-| `Badge` | Small label/tag | BadgeChip, FilterPanel skills |
-| `Input` | Text input field | FilterPanel search |
-| `Pagination` | Page navigation | Home page |
-| `Sheet` | Slide-out panel | Mobile navbar menu |
-| `DropdownMenu` | Popup menu | ModeToggle (theme picker) |
-
----
-
-## Key Patterns to Reuse
-
-### 1. Fixed-Height Card with Pinned Footer
-```jsx
-<Card className="flex flex-col h-full">
-  <CardHeader className="shrink-0" />   {/* Fixed */}
-  <CardContent className="flex-1" />    {/* Grows */}
-  <CardFooter className="shrink-0 mt-auto" />  {/* Pinned bottom */}
+<Card className="group">
+  <div className="group-hover:border-amber-500/50" />
 </Card>
 ```
 
-### 2. Responsive Grid
-```jsx
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+---
+
+## Backend Integration Guide
+
+### Architecture
+```
+Frontend (React/Vite)        Backend (Laravel)
+port 5174              ←→    port 8000
+
+axios/fetch → /api/developers → DeveloperController → Developer model → MySQL
 ```
 
-### 3. Gradient Text
-```jsx
-<h1 className="bg-gradient-to-r from-purple-600 to-purple-800
-  bg-clip-text text-transparent">
+### API Endpoints Needed
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/developers` | List with filters (search, jobTitle, skills, location, availability) |
+| `GET` | `/api/developers/{slug}` | Single developer profile |
+| `GET` | `/api/badges` | All badges |
+| `GET` | `/api/blogs` | Blog posts |
+| `GET` | `/api/hackathons` | Hackathon list |
+| `GET` | `/api/charts/stats` | Aggregated stats for charts |
+| `POST` | `/api/register` | Register new developer |
+| `POST` | `/api/login` | Login + return token |
+| `POST` | `/api/logout` | Logout (revoke token) |
+| `PUT` | `/api/developers/{slug}` | Update developer profile |
+| `POST` | `/api/recommendations` | Add recommendation |
+
+### Database Models Needed
+
+```
+Developer     → id, slug, name, job_title, bio, avatar, experience_years,
+                location, email, github_url, linkedin_url, portfolio_url,
+                availability, availability_type, is_recommended, salary,
+                created_at, updated_at
+
+developer_skill (pivot) → developer_id, skill_id
+developer_badge (pivot) → developer_id, badge_id
+Skill         → id, name, slug
+Badge         → id, name, slug, description, icon, color
+Recommendation → id, developer_id, recommender_name, recommender_title, quote
+Blog          → id, title, slug, excerpt, body, featured_image, author_id, published_at
+Hackathon     → id, title, slug, description, image, date, location, status
+User          → id, name, email, password (standard Laravel)
 ```
 
-### 4. Glassmorphism
-```jsx
-className="bg-background/80 backdrop-blur-md"
-```
+### Frontend Files to Update for API
 
-### 5. Group Hover
-```jsx
-<div className="group">
-  <div className="group-hover:border-purple-500" />
-</div>
-```
-
-### 6. Color Opacity Tints
-```jsx
-className="bg-purple-500/10"  // 10% opacity = subtle tint
-className="border-purple-500/20"  // 20% opacity border
-```
-
-### 7. Lazy-Loaded Routes
-```jsx
-const Page = lazy(() => import("@/pages/page"));
-// Wrap in <Suspense fallback={<Loading />}>
-```
-
-### 8. Dark Mode Support
-```jsx
-className="text-gray-900 dark:text-white bg-white dark:bg-gray-900"
-// Or use theme variables: text-foreground bg-background
-```
-
-### 9. Conditional Rendering
-```jsx
-{phone && <PhoneDisplay />}     // Show only if phone exists
-{isOpen && <FilterContent />}   // Show only when open
-```
-
-### 10. State Lifted to Parent
-```jsx
-// Parent owns the state:
-const [filters, setFilters] = useState({...});
-// Child receives and updates via props:
-<FilterPanel filters={filters} onFilterChange={setFilters} />
-```
+| File | Change |
+|------|--------|
+| `data/mock.js` | Remove / keep as fallback |
+| `pages/home/index.jsx` | Replace `mockDevelopers` with `useQuery(["developers", filters])` |
+| `pages/developer-profile/index.jsx` | Replace `mockDevelopers.find()` with `useQuery(["developer", slug])` |
+| `pages/blogs/index.jsx` | Replace `mockBlogs` with `useQuery(["blogs"])` |
+| `pages/badges/index.jsx` | Replace `mockBadges` with `useQuery(["badges"])` |
+| `pages/charts/index.jsx` | Replace `mockChartData` with `useQuery(["charts/stats"])` |
+| `pages/hackathons/index.jsx` | Replace `mockHackathons` with `useQuery(["hackathons"])` |
+| `context/AuthContext.jsx` | Connect to `/api/login`, `/api/logout`, store Sanctum token |

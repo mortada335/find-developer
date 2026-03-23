@@ -1,204 +1,200 @@
 # Quickstart Cheatsheet
 
-> Copy-paste recipes for common patterns used in this project.
+> Copy-paste recipes for patterns used in this DevConnect project.
 
 ---
 
 ## 1. Create a New Page
 
 ```bash
-# Step 1: Create the page file
-mkdir -p src/pages/my-page
-touch src/pages/my-page/index.jsx
+mkdir -p src/pages/my-page && touch src/pages/my-page/index.jsx
 ```
 
 ```jsx
-// Step 2: Write the page component
 // src/pages/my-page/index.jsx
 import Section from "@/components/layout/Section";
+import HeroSection from "@/components/layout/HeroSection";
 
-const MyPage = () => {
-  return (
-    <Section>
-      <h1 className="text-3xl font-bold">My Page</h1>
-      <p className="text-muted-foreground mt-2">Page content here.</p>
+const MyPage = () => (
+  <>
+    <HeroSection
+      badge="My Page"
+      title="Page Title"
+      subtitle="Short description here."
+    />
+    <Section className="h-auto min-h-0">
+      <h2 className="text-2xl font-bold">Content</h2>
     </Section>
-  );
-};
+  </>
+);
 
 export default MyPage;
 ```
 
 ```jsx
-// Step 3: Add route in src/routes/index.jsx
+// src/routes/index.jsx — add:
 const MyPage = lazy(() => import("@/pages/my-page"));
-
-// Add to publicRoutes array:
 { path: "/my-page", element: <MyPage /> },
 ```
 
 ---
 
-## 2. Use Dark Mode Colors
+## 2. Color Reference (Amber Theme)
 
-```jsx
-// ❌ BAD: Hard-coded colors (breaks in dark mode)
-<p className="text-gray-800">Hello</p>
+| Class | Use For |
+|---|---|
+| `text-foreground` | Primary text |
+| `text-muted-foreground` | Secondary/dim text |
+| `bg-background` | Page background |
+| `bg-card` | Card background |
+| `bg-amber-500 text-black` | Primary buttons |
+| `text-amber-500` | Accent text / icons |
+| `border-amber-500/30` | Subtle amber border |
+| `bg-amber-500/10` | Subtle amber background tint |
 
-// ✅ GOOD: Theme-aware colors
-<p className="text-foreground">Primary text</p>
-<p className="text-muted-foreground">Secondary text</p>
-
-// ✅ GOOD: Manual dark mode override
-<p className="text-gray-800 dark:text-gray-200">Hello</p>
-```
-
-### Color Reference
-
-| Class | Light | Dark | Use For |
-|---|---|---|---|
-| `text-foreground` | Black | White | Primary text |
-| `text-muted-foreground` | Gray | Light gray | Secondary text |
-| `bg-background` | White | Near black | Page background |
-| `bg-muted` | Light gray | Dark gray | Subtle backgrounds |
-| `bg-card` | White | Dark gray | Card backgrounds |
-| `text-primary` | Purple | Purple | Brand/accent text |
+> ⚠️ Do NOT use purple — the theme has been converted to amber.
 
 ---
 
 ## 3. Responsive Breakpoints
 
 ```jsx
-// Mobile-first: write mobile style, then override for larger screens
-
-<div className="
-  text-sm            // Mobile: small text
-  md:text-base       // Tablet (768px+): normal text
-  lg:text-lg         // Desktop (1024px+): large text
-">
-
-// Common grid pattern:
+// Mobile-first:
 <div className="
   grid
-  grid-cols-1        // Mobile: 1 column
-  md:grid-cols-2     // Tablet: 2 columns
-  lg:grid-cols-3     // Desktop: 3 columns
+  grid-cols-1        // Mobile: 1 col
+  md:grid-cols-2     // Tablet 768px+: 2 cols
+  lg:grid-cols-3     // Desktop 1024px+: 3 cols
   gap-4
 ">
 
-// Show/hide by screen size:
-<div className="hidden md:flex">   {/* Hidden on mobile */}
-<div className="md:hidden">        {/* Hidden on desktop */}
+// Show/hide:
+<div className="hidden md:flex">  {/* Desktop only */}
+<div className="md:hidden">       {/* Mobile only */}
 ```
 
 ---
 
-## 4. Opacity Color Tints
+## 4. Card with Pinned Footer Button
 
 ```jsx
-// Instead of picking exact colors, use opacity:
-bg-purple-500/10    // 10% opacity = very subtle tint
-bg-purple-500/20    // 20% opacity = light tint
-bg-purple-500/30    // 30% opacity = medium tint
-border-purple-500/20 // Subtle border
-hover:bg-purple-500/10 // Subtle hover effect
-
-// Great for: badges, hover states, backgrounds, borders
+<Card className="flex flex-col h-full group hover:shadow-lg hover:border-amber-500/30 transition-all">
+  <CardHeader className="shrink-0">
+    {/* Fixed height — always same */}
+  </CardHeader>
+  <CardContent className="flex-1 space-y-3">
+    {/* Grows to fill space */}
+    <p className="text-sm text-muted-foreground line-clamp-3 min-h-[3.75rem]">
+      {description || "\u00A0"}
+    </p>
+  </CardContent>
+  <CardFooter className="shrink-0 mt-auto">
+    <Button className="w-full">View Details</Button>
+  </CardFooter>
+</Card>
 ```
 
 ---
 
-## 5. Smooth Transitions
+## 5. Filter State Pattern (Lifted State)
 
 ```jsx
-// Add to any element for smooth changes:
-className="transition-all duration-300"
-
-// Specific transitions:
-transition-colors     // Only animate color changes
-transition-opacity    // Only animate opacity
-transition-transform  // Only animate transforms (scale, move)
-transition-all        // Animate everything
-
-// Durations:
-duration-150   // Fast (buttons)
-duration-200   // Normal
-duration-300   // Smooth (cards)
-duration-500   // Slow (page transitions)
-```
-
----
-
-## 6. Common Icon Sizes
-
-```jsx
-// lucide-react icons:
-<Icon className="h-3 w-3" />    // Tiny (inside badges)
-<Icon className="h-3.5 w-3.5" /> // Small (inline with text)
-<Icon className="h-4 w-4" />    // Normal (nav, buttons)
-<Icon className="h-5 w-5" />    // Medium (mobile menu)
-<Icon className="h-7 w-7" />    // Large (avatar placeholder)
-```
-
----
-
-## 7. State Management Flow
-
-```jsx
-// PARENT owns the state:
+// Parent owns state:
 const [filters, setFilters] = useState({ search: "", jobTitle: "" });
 
-// PARENT passes state + setter to CHILD:
-<FilterPanel
-  filters={filters}                    // State (read-only for child)
-  onFilterChange={(newFilters) => {     // Callback to update state
-    setFilters(newFilters);
-    setCurrentPage(1);                 // Side effect
-  }}
-/>
+const handleFilterChange = (newFilters) => {
+  setFilters(newFilters);
+  setCurrentPage(1);  // Reset to page 1
+};
 
-// CHILD reads state from props and calls callback to update:
+// Pass to child:
+<FilterPanel filters={filters} onFilterChange={handleFilterChange} />
+
+// In FilterPanel:
 const FilterPanel = ({ filters, onFilterChange }) => {
-  const updateFilter = (key, value) => {
-    onFilterChange({ ...filters, [key]: value });
-  };
+  const update = (key, val) => onFilterChange({ ...filters, [key]: val });
 };
 ```
 
 ---
 
-## 8. Connecting to a Real API (Future)
+## 6. Pagination
 
 ```jsx
-// BEFORE (mock data):
-import { mockDevelopers } from "@/data/mock";
-const developers = mockDevelopers;
-
-// AFTER (real API with React Query):
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-
-const { data: developers, isLoading } = useQuery({
-  queryKey: ["developers", filters],
-  queryFn: () => axios.get("/api/developers", { params: filters }),
-});
-
-if (isLoading) return <Spinner />;
+const ITEMS_PER_PAGE = 6;
+const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+const visible = filtered.slice(
+  (currentPage - 1) * ITEMS_PER_PAGE,
+  currentPage * ITEMS_PER_PAGE
+);
 ```
 
 ---
 
-## 9. Adding a New shadcn/ui Component
+## 7. LocalStorage Persistence
 
-```bash
-npx shadcn@latest add dialog    # Adds dialog component
-npx shadcn@latest add table     # Adds table component
-npx shadcn@latest add tabs      # Adds tabs component
+```jsx
+// Read saved value on init:
+const [dismissed, setDismissed] = useState(
+  () => localStorage.getItem("my-key") === "true"
+);
+
+// Save on change:
+const dismiss = () => {
+  setDismissed(true);
+  localStorage.setItem("my-key", "true");
+};
 ```
 
-Components are added to `src/components/ui/`. Import them:
+---
+
+## 8. Connecting to Laravel API
+
 ```jsx
-import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
+// Install React Query first:
+// npm install @tanstack/react-query axios
+
+// Wrap App in QueryClientProvider:
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+const queryClient = new QueryClient();
+<QueryClientProvider client={queryClient}><App /></QueryClientProvider>
+
+// In any component:
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+
+const { data: developers, isLoading, isError } = useQuery({
+  queryKey: ["developers", filters],
+  queryFn: () =>
+    axios.get("http://localhost:8000/api/developers", { params: filters })
+      .then(res => res.data),
+});
+
+if (isLoading) return <p>Loading...</p>;
+if (isError) return <p>Error loading data.</p>;
+```
+
+**API base URL** — set in `.env`:
+```
+VITE_API_URL=http://localhost:8000
+```
+
+```jsx
+// Use in axios:
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+```
+
+---
+
+## 9. Auth Token (Sanctum)
+
+```jsx
+// After login, store token:
+localStorage.setItem("token", response.data.token);
+
+// Attach to all requests:
+axios.defaults.headers.common["Authorization"] =
+  `Bearer ${localStorage.getItem("token")}`;
 ```
 
 ---
@@ -206,7 +202,8 @@ import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 ## 10. Project Commands
 
 ```bash
-npm run dev      # Start development server (port 5173)
-npm run build    # Build for production
+npm run dev      # Start dev server → http://localhost:5174
+npm run build    # Production build
 npm run preview  # Preview production build locally
+npx shadcn@latest add <component>  # Add new shadcn/ui component
 ```

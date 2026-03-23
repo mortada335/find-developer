@@ -221,15 +221,33 @@ const Home = () => {
         {paginatedDevelopers.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {paginatedDevelopers.map((dev) => (
-              <div key={dev.id} className="relative">
-                {/* Selection checkbox */}
+              <div
+                key={dev.id}
+                className={`relative rounded-xl transition-all duration-150 ${
+                  selectedIds.includes(dev.id)
+                    ? "ring-2 ring-amber-500 ring-offset-2 ring-offset-background"
+                    : ""
+                }`}
+              >
+                {/* Selection checkbox — custom dark-mode-aware */}
                 <label className="absolute top-3 left-3 z-10 cursor-pointer">
-                  <Input
+                  <input
                     type="checkbox"
                     checked={selectedIds.includes(dev.id)}
                     onChange={() => toggleSelect(dev.id)}
-                    className="h-4 w-4 rounded border-muted-foreground/50 accent-amber-500"
+                    className="sr-only peer"
                   />
+                  <div className={`h-5 w-5 rounded flex items-center justify-center border transition-colors duration-150 ${
+                    selectedIds.includes(dev.id)
+                      ? "bg-amber-500 border-amber-500"
+                      : "bg-white border-zinc-300 dark:bg-zinc-900 dark:border-zinc-600"
+                  }`}>
+                    {selectedIds.includes(dev.id) && (
+                      <svg className="h-3 w-3 text-black" viewBox="0 0 12 12" fill="none">
+                        <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    )}
+                  </div>
                 </label>
                 <DeveloperCard developer={dev} />
               </div>

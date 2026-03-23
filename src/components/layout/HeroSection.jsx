@@ -2,7 +2,7 @@ const HeroSection = ({ badge, title, subtitle }) => {
   return (
     <div className="relative w-full overflow-hidden" style={{ minHeight: '70vh' }}>
       {/* Starry/Dotted Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-background dark:from-slate-950 dark:via-slate-900 dark:to-background">
+      <div className="absolute inset-0 bg-linear-to-b from-slate-950 via-slate-900 to-background dark:from-slate-950 dark:via-slate-900 dark:to-background">
         {/* Dots grid */}
         <div
           className="absolute inset-0 opacity-30"
@@ -12,7 +12,7 @@ const HeroSection = ({ badge, title, subtitle }) => {
           }}
         />
         {/* Subtle gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-900/5 via-transparent to-blue-900/5" />
+        <div className="absolute inset-0 bg-linear-to-br from-amber-900/5 via-transparent to-blue-900/5" />
       </div>
 
       {/* Rubber Ducks */}
