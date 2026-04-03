@@ -11,13 +11,13 @@ import { Button } from "@/components/ui/button";
 import BadgeChip from "@/components/developer/BadgeChip";
 import { mockServices } from "@/data/mock";
 import {
-  Linkedin,
   Mail,
   ChevronDown,
   ChevronUp,
   CheckCircle,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { sanitizeUrl } from "@/lib/security";
 
 const ServiceItem = ({ service }) => {
   const [expanded, setExpanded] = useState(false);
@@ -60,7 +60,7 @@ const ServiceItem = ({ service }) => {
             asChild
             className="bg-purple-600 hover:bg-purple-700 text-white dark:bg-purple-600 dark:hover:bg-purple-700 dark:text-white"
           >
-            <a href={service.ctaEmail}>
+            <a href={sanitizeUrl(service.ctaEmail)}>
               <Mail className="h-4 w-4 mr-2" />
               Contact Us
             </a>
@@ -76,7 +76,7 @@ const Services = () => {
     <Section className="h-auto min-h-0">
       {/* Header */}
       <div className="w-full py-12 md:py-16 text-center">
-        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-3xl md:text-4xl font-bold bg-linear-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-600 bg-clip-text text-transparent">
           Our Services
         </h1>
         <p className="text-muted-foreground text-lg mt-3 max-w-2xl mx-auto">
@@ -96,7 +96,7 @@ const Services = () => {
                 <div className="space-y-1">
                   <CardTitle className="text-xl">{provider.providerName}</CardTitle>
                   <a
-                    href={provider.linkedinUrl}
+                    href={sanitizeUrl(provider.linkedinUrl)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-sm text-purple-600 dark:text-purple-400 hover:underline"

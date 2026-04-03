@@ -19,6 +19,7 @@ import {
   Linkedin,
   Mail,
 } from "lucide-react";
+import { sanitizeUrl } from "@/lib/security";
 
 const CompareModal = ({ developers, onClose }) => {
   if (!developers || developers.length < 2) return null;
@@ -118,7 +119,7 @@ const CompareModal = ({ developers, onClose }) => {
                   <div className="flex flex-wrap gap-2">
                     {dev.portfolioUrl && (
                       <a
-                        href={dev.portfolioUrl}
+                        href={sanitizeUrl(dev.portfolioUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 text-xs text-purple-600 dark:text-purple-400 hover:underline"
@@ -129,7 +130,7 @@ const CompareModal = ({ developers, onClose }) => {
                     )}
                     {dev.githubUrl && (
                       <a
-                        href={dev.githubUrl}
+                        href={sanitizeUrl(dev.githubUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
@@ -140,7 +141,7 @@ const CompareModal = ({ developers, onClose }) => {
                     )}
                     {dev.linkedinUrl && (
                       <a
-                        href={dev.linkedinUrl}
+                        href={sanitizeUrl(dev.linkedinUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
@@ -151,7 +152,7 @@ const CompareModal = ({ developers, onClose }) => {
                     )}
                     {dev.email && (
                       <a
-                        href={`mailto:${dev.email}`}
+                        href={sanitizeUrl(`mailto:${dev.email}`)}
                         className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
                       >
                         <Mail className="h-3 w-3" />

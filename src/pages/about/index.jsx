@@ -51,7 +51,7 @@ const About = () => {
     <Section className="h-auto min-h-0">
       {/* Header */}
       <div className="w-full py-12 md:py-16 text-center">
-        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-3xl md:text-4xl font-bold bg-linear-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-600 bg-clip-text text-transparent">
           About Us
         </h1>
         <p className="text-muted-foreground text-lg mt-3 max-w-2xl mx-auto">
@@ -71,10 +71,10 @@ const About = () => {
             </div>
             <p className="text-muted-foreground leading-relaxed">
               DevConnect is a community-driven platform built to help
-              developers in Iraq and the Middle East showcase their skills and
-              connect with employers. We believe every talented developer
+              developers worldwide showcase their skills and
+              connect with top-tier employers. We believe every talented developer
               deserves to be found, regardless of their background or
-              connections. Our platform provides a transparent, skills-first
+              physical location. Our platform provides a transparent, skills-first
               approach to finding the right developer for your project.
             </p>
           </CardContent>
@@ -178,7 +178,7 @@ const About = () => {
             </Button>
             <Button asChild variant="outline">
               <a
-                href="https://github.com/mortada335/find-developer"
+                href="https://github.com"
                 target="_blank"
                 rel="noopener noreferrer"
               >

@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,15 +15,11 @@ import {
   X,
   ChevronDown,
   ChevronUp,
-  Copy,
-  Check,
-  Sparkles,
 } from "lucide-react";
 import { filterOptions } from "@/data/mock";
 
 const FilterPanel = ({ filters, onFilterChange }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   const updateFilter = (key, value) => {
     onFilterChange({ ...filters, [key]: value });
@@ -54,55 +50,20 @@ const FilterPanel = ({ filters, onFilterChange }) => {
     filters.location ||
     filters.availability;
 
-  // Generate the AI prompt based on current filters
-  const aiPrompt = useMemo(() => {
-    const parts = [];
-    if (filters.jobTitle) parts.push(`Job Title: ${filters.jobTitle}`);
-    if (filters.skills && filters.skills.length > 0)
-      parts.push(`Skills: ${filters.skills.join(", ")}`);
-    if (filters.location) parts.push(`Location: ${filters.location}`);
-    if (filters.availability)
-      parts.push(`Availability: ${filters.availability}`);
-
-    const filterDesc =
-      parts.length > 0
-        ? parts.join(". ") + "."
-        : "(No filters applied – use the link below to browse all developers.)";
-
-    const params = new URLSearchParams({
-      minExperience: "0",
-      maxExperience: "50",
-      expected_salary_from: "0",
-      expected_salary_to: "0",
-    });
-
-    return `Search for developers on https://devconnect.com according to the following company requirements: ${filterDesc} Use this URL: https://www.devconnect.com/?${params.toString()}`;
-  }, [filters]);
-
-  const handleCopyPrompt = async () => {
-    try {
-      await navigator.clipboard.writeText(aiPrompt);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // fallback
-    }
-  };
-
   return (
-    <Card className="border-dashed">
+    <Card className="border-dashed border-border/50 glass">
       <CardHeader
         className="cursor-pointer select-none"
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <SlidersHorizontal className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+            <SlidersHorizontal className="h-4 w-4 text-primary" />
             <CardTitle className="text-base">Filters</CardTitle>
             {hasActiveFilters && (
               <Badge
                 variant="secondary"
-                className="text-xs bg-purple-500/10 text-purple-600 dark:text-purple-400"
+                className="text-xs bg-primary/10 text-primary"
               >
                 Active
               </Badge>
@@ -205,8 +166,8 @@ const FilterPanel = ({ filters, onFilterChange }) => {
                     variant={isActive ? "default" : "outline"}
                     className={`cursor-pointer transition-colors ${
                       isActive
-                        ? "bg-purple-600 hover:bg-purple-700 text-white border-purple-600"
-                        : "hover:bg-purple-500/10 hover:text-purple-600 dark:hover:text-purple-400"
+                        ? "bg-primary hover:bg-primary/80 text-primary-foreground border-primary"
+                        : "hover:bg-primary/10 hover:text-primary hover:border-primary/30"
                     }`}
                     onClick={() => toggleSkill(skill)}
                   >
@@ -215,39 +176,6 @@ const FilterPanel = ({ filters, onFilterChange }) => {
                 );
               })}
             </div>
-          </div>
-
-          {/* AI Prompt */}
-          <div className="rounded-lg border border-dashed p-4 space-y-2">
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-              <h4 className="text-sm font-medium">AI Prompt</h4>
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Copy this prompt to ask an AI assistant to search for developers on
-              devconnect.com. Add filters above, then copy the prompt below.
-            </p>
-            <pre className="text-xs bg-muted p-3 rounded-md overflow-x-auto whitespace-pre-wrap break-words">
-              {aiPrompt}
-            </pre>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleCopyPrompt}
-              className="gap-1.5"
-            >
-              {copied ? (
-                <>
-                  <Check className="h-3.5 w-3.5" />
-                  Copied!
-                </>
-              ) : (
-                <>
-                  <Copy className="h-3.5 w-3.5" />
-                  Copy Prompt
-                </>
-              )}
-            </Button>
           </div>
 
           {/* Clear */}

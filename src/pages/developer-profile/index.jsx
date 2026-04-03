@@ -18,19 +18,20 @@ import {
   Mic,
   Rocket,
   BatteryFull,
+  Star,
   UsersRound,
   BarChart3,
-  Star,
 } from "lucide-react";
+import { sanitizeUrl } from "@/lib/security";
 
-// Badge icon config — matching find-developer.com colored icons row
+// Badge icon config
 const badgeConfig = {
-  "soft-skills": { icon: Mic, color: "#3b82f6" },
-  "experience-validated": { icon: Rocket, color: "#22c55e" },
-  "passion-developer": { icon: BatteryFull, color: "#eab308" },
-  "platform-contributor": { icon: UsersRound, color: "#a855f7" },
-  "platform-marketer": { icon: BarChart3, color: "#ec4899" },
-  "the-founder": { icon: Star, color: "#f97316" },
+  "soft-skills": { icon: Mic, color: "#0ea5e9" },
+  "experience-validated": { icon: Rocket, color: "#10b981" },
+  "passion-developer": { icon: BatteryFull, color: "#8b5cf6" },
+  "platform-contributor": { icon: UsersRound, color: "#06b6d4" },
+  "platform-marketer": { icon: BarChart3, color: "#6366f1" },
+  "the-founder": { icon: Star, color: "#14b8a6" },
 };
 
 const DeveloperProfile = () => {
@@ -50,7 +51,7 @@ const DeveloperProfile = () => {
           </p>
           <Button
             asChild
-            className="bg-amber-500 hover:bg-amber-600 text-black"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
           >
             <Link to="/">Browse Developers</Link>
           </Button>
@@ -95,7 +96,7 @@ const DeveloperProfile = () => {
         {/* Back to Search */}
         <Link
           to="/"
-          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-amber-500 transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Search
@@ -104,7 +105,7 @@ const DeveloperProfile = () => {
         {/* ── Profile Header ── */}
         <div className="flex flex-col sm:flex-row items-start gap-6">
           {/* Avatar with initials fallback */}
-          <div className="h-20 w-20 rounded-full bg-amber-500/20 flex items-center justify-center overflow-hidden shrink-0 text-2xl font-bold text-amber-500">
+          <div className="h-20 w-20 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden shrink-0 text-2xl font-bold text-primary">
             {avatar ? (
               <img
                 src={avatar}
@@ -200,7 +201,7 @@ const DeveloperProfile = () => {
               <div className="flex flex-wrap gap-3">
                 {email && (
                   <Button asChild variant="outline" size="sm">
-                    <a href={`mailto:${email}`}>
+                    <a href={sanitizeUrl(`mailto:${email}`)}>
                       <Mail className="h-4 w-4 mr-1.5" />
                       Send Email
                     </a>
@@ -209,7 +210,7 @@ const DeveloperProfile = () => {
                 {githubUrl && (
                   <Button asChild variant="outline" size="sm">
                     <a
-                      href={githubUrl}
+                      href={sanitizeUrl(githubUrl)}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -221,7 +222,7 @@ const DeveloperProfile = () => {
                 {linkedinUrl && (
                   <Button asChild variant="outline" size="sm">
                     <a
-                      href={linkedinUrl}
+                      href={sanitizeUrl(linkedinUrl)}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -241,7 +242,7 @@ const DeveloperProfile = () => {
                   {skills.map((skill) => (
                     <Badge
                       key={skill}
-                      className="bg-amber-500 hover:bg-amber-600 text-black border-amber-500"
+                      className="bg-primary hover:bg-primary/90 text-primary-foreground border-primary"
                     >
                       {skill}
                     </Badge>
@@ -286,7 +287,7 @@ const DeveloperProfile = () => {
               ) : (
                 <Link
                   to="#"
-                  className="text-amber-500 hover:underline text-sm"
+                  className="text-primary hover:underline text-sm"
                 >
                   Login to Recommend
                 </Link>
@@ -331,9 +332,9 @@ const DeveloperProfile = () => {
                   {email && (
                     <Button
                       asChild
-                      className="w-full bg-amber-500 hover:bg-amber-600 text-black"
+                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                     >
-                      <a href={`mailto:${email}`}>
+                      <a href={sanitizeUrl(`mailto:${email}`)}>
                         <Mail className="h-4 w-4 mr-2" />
                         Contact Now
                       </a>

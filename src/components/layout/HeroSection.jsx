@@ -1,66 +1,72 @@
+import { motion } from "framer-motion";
+import { Sparkles, Code2, ChevronDown } from "lucide-react";
+
 const HeroSection = ({ badge, title, subtitle }) => {
   return (
-    <div className="relative w-full overflow-hidden" style={{ minHeight: '70vh' }}>
-      {/* Starry/Dotted Background */}
-      <div className="absolute inset-0 bg-linear-to-b from-slate-950 via-slate-900 to-background dark:from-slate-950 dark:via-slate-900 dark:to-background">
-        {/* Dots grid */}
-        <div
-          className="absolute inset-0 opacity-30"
-          style={{
-            backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px)',
-            backgroundSize: '60px 60px',
-          }}
-        />
-        {/* Subtle gradient overlay */}
-        <div className="absolute inset-0 bg-linear-to-br from-amber-900/5 via-transparent to-blue-900/5" />
-      </div>
-
-      {/* Rubber Ducks */}
-      <div className="absolute top-[25%] left-[8%] text-4xl animate-bounce" style={{ animationDuration: '3s' }}>
-        🦆
-      </div>
-      <div className="absolute top-[55%] right-[8%] text-4xl animate-bounce" style={{ animationDuration: '4s', animationDelay: '1s' }}>
-        🦆
-      </div>
-      <div className="absolute bottom-[30%] left-[15%] text-3xl animate-bounce hidden md:block" style={{ animationDuration: '3.5s', animationDelay: '0.5s' }}>
-        🦆
-      </div>
-      <div className="absolute top-[40%] right-[20%] text-3xl animate-bounce hidden lg:block" style={{ animationDuration: '4.5s', animationDelay: '1.5s' }}>
-        🦆
-      </div>
+    <div className="relative w-full overflow-hidden flex flex-col justify-center items-center py-20 lg:py-32 background-gradient" style={{ minHeight: '80vh' }}>
+      
+      {/* Decorative blurred blobs */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full mix-blend-screen filter blur-[128px] opacity-70 animate-float" style={{ animationDuration: '8s' }} />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full mix-blend-screen filter blur-[128px] opacity-60 animate-float" style={{ animationDuration: '10s', animationDirection: 'reverse' }} />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center text-center px-4 py-24 md:py-32">
-        {/* Amber Badge Pill */}
+      <div className="relative z-10 flex flex-col items-center justify-center text-center px-4 max-w-5xl mx-auto">
+        {/* Badge Pill */}
         {badge && (
-          <div className="inline-flex items-center gap-2 mb-6">
-            <span className="text-2xl">🦆</span>
-            <span className="px-4 py-1.5 rounded-full border border-amber-500/40 bg-amber-500/10 text-amber-400 text-sm font-medium">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 mb-8 glass px-4 py-2 rounded-full border border-primary/30"
+          >
+            <Sparkles className="w-4 h-4 text-primary" />
+            <span className="text-primary text-sm font-semibold tracking-wide uppercase">
               {badge}
             </span>
-            <span className="text-2xl">🦆</span>
-          </div>
+          </motion.div>
         )}
 
         {/* Title */}
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white max-w-4xl leading-tight">
-          {title}
-        </h1>
+        <motion.h1 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-foreground tracking-tight max-w-4xl leading-[1.1]"
+        >
+          {title.split('developer').map((part, i, arr) => (
+            <span key={i}>
+              {part}
+              {i !== arr.length - 1 && (
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-blue-500">
+                  developer
+                </span>
+              )}
+            </span>
+          ))}
+        </motion.h1>
 
         {/* Subtitle */}
         {subtitle && (
-          <p className="mt-4 text-lg md:text-xl text-gray-400 max-w-2xl">
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="mt-6 text-lg md:text-xl text-muted-foreground max-w-2xl font-light"
+          >
             {subtitle}
-          </p>
+          </motion.p>
         )}
 
         {/* Scroll indicator */}
-        <div className="mt-12 flex flex-col items-center gap-1 text-gray-500 animate-pulse">
-          <span className="text-sm">Scroll</span>
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-          </svg>
-        </div>
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1 }}
+          className="mt-16 flex flex-col items-center gap-2 text-muted-foreground animate-bounce"
+        >
+          <span className="text-xs uppercase tracking-widest font-medium">Explore</span>
+          <ChevronDown className="h-5 w-5 opacity-75" />
+        </motion.div>
       </div>
     </div>
   );

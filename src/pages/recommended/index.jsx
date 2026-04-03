@@ -19,7 +19,7 @@ const Recommended = () => {
           <ThumbsUp className="h-4 w-4" />
           Recommended by our team
         </div>
-        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-3xl md:text-4xl font-bold bg-linear-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-600 bg-clip-text text-transparent">
           Recommended Developers
         </h1>
         <p className="text-muted-foreground text-lg mt-3 max-w-2xl mx-auto">

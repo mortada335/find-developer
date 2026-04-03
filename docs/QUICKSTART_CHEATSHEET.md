@@ -1,209 +1,81 @@
-# Quickstart Cheatsheet
+# DevConnect — Quick Start Cheatsheet
 
-> Copy-paste recipes for patterns used in this DevConnect project.
-
----
-
-## 1. Create a New Page
+## 🚀 Setup
 
 ```bash
-mkdir -p src/pages/my-page && touch src/pages/my-page/index.jsx
+npm install
+npm run dev        # → http://localhost:5173
+npm run build      # Production build
 ```
 
-```jsx
-// src/pages/my-page/index.jsx
-import Section from "@/components/layout/Section";
-import HeroSection from "@/components/layout/HeroSection";
+## 📁 Key Files
 
-const MyPage = () => (
-  <>
-    <HeroSection
-      badge="My Page"
-      title="Page Title"
-      subtitle="Short description here."
-    />
-    <Section className="h-auto min-h-0">
-      <h2 className="text-2xl font-bold">Content</h2>
-    </Section>
-  </>
-);
-
-export default MyPage;
-```
-
-```jsx
-// src/routes/index.jsx — add:
-const MyPage = lazy(() => import("@/pages/my-page"));
-{ path: "/my-page", element: <MyPage /> },
-```
-
----
-
-## 2. Color Reference (Amber Theme)
-
-| Class | Use For |
+| File | Purpose |
 |---|---|
-| `text-foreground` | Primary text |
-| `text-muted-foreground` | Secondary/dim text |
-| `bg-background` | Page background |
-| `bg-card` | Card background |
-| `bg-amber-500 text-black` | Primary buttons |
-| `text-amber-500` | Accent text / icons |
-| `border-amber-500/30` | Subtle amber border |
-| `bg-amber-500/10` | Subtle amber background tint |
+| `src/data/mock.js` | All dummy data (developers, jobs, blogs, etc.) |
+| `src/context/AppContext.jsx` | State management store (bookmarks, jobs, notifications) |
+| `src/context/AuthContext.jsx` | Authentication state |
+| `src/services/api.js` | Data access service layer |
+| `src/routes/index.jsx` | All route definitions |
+| `src/index.css` | Global styles and CSS variables |
 
-> ⚠️ Do NOT use purple — the theme has been converted to amber.
+## 🎨 Theme Colors
 
----
+| Token | Value | Use |
+|---|---|---|
+| `primary` | Emerald/Teal | Buttons, links, accents |
+| `blue-500` | Blue | Badges, recommendations |
+| `violet-500` | Violet | Availability type tags |
+| `destructive` | Red | Error states, destructive actions |
+| `muted-foreground` | Gray | Secondary text |
 
-## 3. Responsive Breakpoints
+## 🧩 Key Components
 
+### Developer Card
 ```jsx
-// Mobile-first:
-<div className="
-  grid
-  grid-cols-1        // Mobile: 1 col
-  md:grid-cols-2     // Tablet 768px+: 2 cols
-  lg:grid-cols-3     // Desktop 1024px+: 3 cols
-  gap-4
-">
-
-// Show/hide:
-<div className="hidden md:flex">  {/* Desktop only */}
-<div className="md:hidden">       {/* Mobile only */}
+import DeveloperCard from "@/components/developer/DeveloperCard";
+<DeveloperCard developer={devObject} />
 ```
 
----
-
-## 4. Card with Pinned Footer Button
-
+### Bookmark Button
 ```jsx
-<Card className="flex flex-col h-full group hover:shadow-lg hover:border-amber-500/30 transition-all">
-  <CardHeader className="shrink-0">
-    {/* Fixed height — always same */}
-  </CardHeader>
-  <CardContent className="flex-1 space-y-3">
-    {/* Grows to fill space */}
-    <p className="text-sm text-muted-foreground line-clamp-3 min-h-[3.75rem]">
-      {description || "\u00A0"}
-    </p>
-  </CardContent>
-  <CardFooter className="shrink-0 mt-auto">
-    <Button className="w-full">View Details</Button>
-  </CardFooter>
-</Card>
+import BookmarkButton from "@/components/developer/BookmarkButton";
+<BookmarkButton developerId={dev.id} />
 ```
 
----
-
-## 5. Filter State Pattern (Lifted State)
-
+### Using State Management
 ```jsx
-// Parent owns state:
-const [filters, setFilters] = useState({ search: "", jobTitle: "" });
-
-const handleFilterChange = (newFilters) => {
-  setFilters(newFilters);
-  setCurrentPage(1);  // Reset to page 1
-};
-
-// Pass to child:
-<FilterPanel filters={filters} onFilterChange={handleFilterChange} />
-
-// In FilterPanel:
-const FilterPanel = ({ filters, onFilterChange }) => {
-  const update = (key, val) => onFilterChange({ ...filters, [key]: val });
-};
+import { useApp } from "@/context/AppContext";
+const { toggleBookmark, isBookmarked, applyToJob, hasApplied } = useApp();
 ```
 
----
+## 🗺️ Routes
 
-## 6. Pagination
+| Path | Page |
+|---|---|
+| `/` | Home (hero, stats, featured, grid) |
+| `/jobs` | Job board |
+| `/hackathons` | Events |
+| `/blogs` | Blog |
+| `/testimonials` | Client testimonials |
+| `/charts` | Analytics |
+| `/badges` | Badge guide |
+| `/developers/:slug` | Developer profile |
+| `/register` | Sign up |
+| `/admin/login` | Sign in |
 
-```jsx
-const ITEMS_PER_PAGE = 6;
-const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
-const visible = filtered.slice(
-  (currentPage - 1) * ITEMS_PER_PAGE,
-  currentPage * ITEMS_PER_PAGE
-);
-```
+## 📦 Dependencies
 
----
+- **React 19** — UI framework
+- **react-router-dom** — Client routing
+- **framer-motion** — Animations
+- **lucide-react** — Icons
+- **shadcn/ui** — Component primitives
+- **tailwindcss** — Utility CSS
 
-## 7. LocalStorage Persistence
+## 💡 Tips
 
-```jsx
-// Read saved value on init:
-const [dismissed, setDismissed] = useState(
-  () => localStorage.getItem("my-key") === "true"
-);
-
-// Save on change:
-const dismiss = () => {
-  setDismissed(true);
-  localStorage.setItem("my-key", "true");
-};
-```
-
----
-
-## 8. Connecting to Laravel API
-
-```jsx
-// Install React Query first:
-// npm install @tanstack/react-query axios
-
-// Wrap App in QueryClientProvider:
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-const queryClient = new QueryClient();
-<QueryClientProvider client={queryClient}><App /></QueryClientProvider>
-
-// In any component:
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-
-const { data: developers, isLoading, isError } = useQuery({
-  queryKey: ["developers", filters],
-  queryFn: () =>
-    axios.get("http://localhost:8000/api/developers", { params: filters })
-      .then(res => res.data),
-});
-
-if (isLoading) return <p>Loading...</p>;
-if (isError) return <p>Error loading data.</p>;
-```
-
-**API base URL** — set in `.env`:
-```
-VITE_API_URL=http://localhost:8000
-```
-
-```jsx
-// Use in axios:
-axios.defaults.baseURL = import.meta.env.VITE_API_URL;
-```
-
----
-
-## 9. Auth Token (Sanctum)
-
-```jsx
-// After login, store token:
-localStorage.setItem("token", response.data.token);
-
-// Attach to all requests:
-axios.defaults.headers.common["Authorization"] =
-  `Bearer ${localStorage.getItem("token")}`;
-```
-
----
-
-## 10. Project Commands
-
-```bash
-npm run dev      # Start dev server → http://localhost:5174
-npm run build    # Production build
-npm run preview  # Preview production build locally
-npx shadcn@latest add <component>  # Add new shadcn/ui component
-```
+- All state persists to `localStorage` — clear it to reset
+- The `api.js` service layer is ready for backend swap — replace function bodies with real API calls
+- Framer Motion `<motion.div>` wraps cards/sections for enter animations
+- The `.glass` CSS class applies frosted glassmorphism styling
