@@ -27,6 +27,7 @@ import {
   Calendar,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { sanitizeUrl } from "@/lib/security";
 
 const Profile = () => {
   const { user, isAuthenticated, updateProfile } = useAuth();
@@ -85,7 +86,7 @@ const Profile = () => {
       <div className="w-full max-w-3xl mx-auto py-12 md:py-16 space-y-8">
         {/* Header */}
         <div className="text-center animate-fade-in">
-          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-3xl md:text-4xl font-bold bg-linear-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-600 bg-clip-text text-transparent">
             My Profile
           </h1>
           <p className="text-muted-foreground text-lg mt-3">
@@ -97,7 +98,7 @@ const Profile = () => {
         <Card className="overflow-hidden animate-slide-up">
           <CardHeader className="relative">
             {/* Purple gradient banner */}
-            <div className="absolute inset-0 h-24 bg-gradient-to-r from-purple-600/20 to-purple-800/20 dark:from-purple-400/10 dark:to-purple-600/10" />
+            <div className="absolute inset-0 h-24 bg-linear-to-r from-purple-600/20 to-purple-800/20 dark:from-purple-400/10 dark:to-purple-600/10" />
 
             <div className="relative pt-8 flex flex-col sm:flex-row items-center sm:items-end gap-4">
               {/* Avatar */}
@@ -231,7 +232,7 @@ const Profile = () => {
                     />
                   ) : user.linkedinUrl ? (
                     <a
-                      href={user.linkedinUrl}
+                      href={sanitizeUrl(user.linkedinUrl)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-sm text-purple-600 dark:text-purple-400 hover:underline"
@@ -257,7 +258,7 @@ const Profile = () => {
                     />
                   ) : user.githubUrl ? (
                     <a
-                      href={user.githubUrl}
+                      href={sanitizeUrl(user.githubUrl)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-sm text-purple-600 dark:text-purple-400 hover:underline"
@@ -285,7 +286,7 @@ const Profile = () => {
                     />
                   ) : user.portfolioUrl ? (
                     <a
-                      href={user.portfolioUrl}
+                      href={sanitizeUrl(user.portfolioUrl)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-sm text-purple-600 dark:text-purple-400 hover:underline"

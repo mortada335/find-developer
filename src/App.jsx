@@ -3,42 +3,37 @@ import { Route, Routes } from "react-router-dom";
 import { publicRoutes } from "./routes";
 import Layout from "./components/layout/Layout";
 import { AuthProvider } from "./context/AuthContext";
+import { AppProvider } from "./context/AppContext";
 
 function App() {
   return (
-    <AuthProvider>
-      <Suspense
-        fallback={
-          <section className="font-roboto layout">
-            <div className="flex justify-center items-center h-screen w-full">
-              <span className="loader"></span>
+    <AppProvider>
+      <AuthProvider>
+        <Suspense
+          fallback={
+            <div className="flex justify-center items-center h-screen w-full bg-background">
+              <div className="flex flex-col items-center gap-4">
+                <div className="h-8 w-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                <p className="text-sm text-muted-foreground font-medium">Loading...</p>
+              </div>
             </div>
-          </section>
-        }
-      >
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            {publicRoutes.map(({ path, element, index }) => (
-              <Route
-                key={path}
-                path={path}
-                element={element}
-                index={index}
-              />
-            ))}
-          </Route>
-
-          {/* 
-            Protected routes (future):
-            import ProtectedRoute from './components/layout/ProtectedRoute';
-            
-            <Route path="/dashboard" element={
-              <ProtectedRoute><Dashboard /></ProtectedRoute>
-            } />
-          */}
-        </Routes>
-      </Suspense>
-    </AuthProvider>
+          }
+        >
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              {publicRoutes.map(({ path, element, index }) => (
+                <Route
+                  key={path}
+                  path={path}
+                  element={element}
+                  index={index}
+                />
+              ))}
+            </Route>
+          </Routes>
+        </Suspense>
+      </AuthProvider>
+    </AppProvider>
   );
 }
 
