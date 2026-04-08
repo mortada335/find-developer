@@ -73,9 +73,6 @@ const Footer = () => {
           <p className="text-xs text-muted-foreground">
             © {new Date().getFullYear()} DevConnect. All rights reserved.
           </p>
-          <p className="text-xs text-muted-foreground">
-            Built with React, Tailwind, and Framer Motion
-          </p>
         </div>
       </div>
     </footer>
